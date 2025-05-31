@@ -6,7 +6,7 @@ else ifeq ($(filter asan,$(MAKECMDGOALS)),asan)
     ASAN_FLAGS = -fsanitize=address -fsanitize-trap
 endif
 
-CFLAGS = -Wall -Wextra -Wpedantic -Wcast-align -Wconversion -Wunused -Wshadow -O2 $(ASAN_FLAGS) -std=c11 -Iinclude
+CFLAGS = -Wall -Wextra -Wpedantic -Wcast-align -Wconversion -Wunused -Wshadow -O3 $(ASAN_FLAGS) -std=c17 -Iinclude
 LDFLAGS = $(ASAN_FLAGS)
 
 BIN = software_rasterizer

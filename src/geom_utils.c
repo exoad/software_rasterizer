@@ -1,6 +1,9 @@
-#include "utils.h"
 #include <assert.h>
 #include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "geometry.h"
 
 float jm_vec2_dot(const JM_Vec2* a, const JM_Vec2* b)
 {
@@ -44,4 +47,42 @@ bool jm_triangles_encloses(const JM_Vec2 pt, const JM_Vec2 a, const JM_Vec2 b, c
     const float d2 = jm_triangles_sign(pt, b, c);
     const float d3 = jm_triangles_sign(pt, c, a);
     return !(((d1 < 0) || (d2 < 0) || (d3 < 0)) && ((d1 > 0) || (d2 > 0) || (d3 > 0)));
+}
+
+char* jm_vec2_to_string(const JM_Vec2* vec)
+{
+    if (vec == NULL)
+        return NULL;
+    int buffer_size = 50;
+    char* str = (char*) malloc((usize) buffer_size * sizeof(char));
+    if (str == NULL)
+    {
+        perror("Failed to allocate memory for JM_Vec2 string");
+        return NULL;
+    }
+    if (snprintf(str, (usize) buffer_size, "(%.2f, %.2f)", vec->x, vec->y) < 0)
+    {
+        free(str);
+        return NULL;
+    }
+    return str;
+}
+
+char* jm_vec3_to_string(const JM_Vec3* vec)
+{
+    if (vec == NULL)
+        return NULL;
+    char* str = (char*)malloc(70 * sizeof(char));
+    if (str == NULL)
+    {
+        perror("Failed to allocate memory for JM_Vec3 string");
+        return NULL;
+    }
+    int chars_written = snprintf(str, 70, "(%.2f, %.2f, %.2f)", vec->x, vec->y, vec->z);
+    if (chars_written < 0)
+    {
+        free(str);
+        return NULL;
+    }
+    return str;
 }

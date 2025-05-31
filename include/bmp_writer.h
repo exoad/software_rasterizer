@@ -24,6 +24,6 @@ void jm_bmp_write(const JM_BMP_Write_ArgDesc* args);
 /// @brief Converts a raster buffer into a new 24-bit BGR format for usage with bmp writing.
 /// @param raster buffer
 /// @return pointer to the buffer, NULL if creation failed softly.
-uint8* jm_raster_buffert_to_bmp_data(const JM_RasterBuffer* raster);
+uint8* jm_raster_buffer_to_bmp_data(const JM_RasterBuffer* raster);
 
 #endif

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "allocator.h"
 #include "renderer.h"
 #include "bmp_writer.h"
 #include "prebaked_rasters.h"
@@ -63,6 +64,6 @@ int main()
         .width = buffer->width,
         .height = buffer->height,
         .bitsPerPixel = 24,
-        .data = jm_raster_buffert_to_bmp_data(buffer)
+        .data = jm_raster_buffer_to_bmp_data(buffer)
     });
 }

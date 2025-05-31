@@ -1,7 +1,7 @@
-#include "utils.h"
-
 #include <stdio.h>
 #include <assert.h>
+
+#include "utils.h"
 
 float jm_clampf(const float value, const float min, const float max)
 {

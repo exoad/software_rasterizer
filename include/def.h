@@ -4,10 +4,15 @@
 #include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 typedef unsigned char uint8;
 typedef unsigned int uint;
 typedef long long int64;
+typedef uintptr_t uintptr;
+typedef size_t usize;
+typedef uint32_t uint32;
 
 #define ASSERT_NOT_NULL(ptr)                                                       \
     do {                                                                           \
@@ -17,5 +22,6 @@ typedef long long int64;
             assert(0 && "Null Pointer Exception");                                 \
         }                                                                          \
     } while (0)
+
 
 #endif

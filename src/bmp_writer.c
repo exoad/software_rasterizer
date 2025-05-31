@@ -53,13 +53,13 @@ void jm_bmp_write(const JM_BMP_Write_ArgDesc* data)
     fwrite(infoHeader, 1, 40, out);
     for(int i = 0; i < data->height; i++)
     {
-        fwrite(data->data + (i * bytesPerRow), 3, (size_t) data->width, out);
-        fwrite(pad, 1, (size_t) padding, out);
+        fwrite(data->data + (i * bytesPerRow), 3, (usize) data->width, out);
+        fwrite(pad, 1, (usize) padding, out);
     }
     fclose(out);
 }
 
-uint8* jm_raster_buffert_to_bmp_data(const JM_RasterBuffer* raster)
+uint8* jm_raster_buffer_to_bmp_data(const JM_RasterBuffer* raster)
 {
     ASSERT_NOT_NULL(raster);
     ASSERT_NOT_NULL(raster->data);
@@ -71,12 +71,12 @@ uint8* jm_raster_buffert_to_bmp_data(const JM_RasterBuffer* raster)
         fprintf(stderr, "ERROR: jm_raster_buffer_to_bmp_data: Invalid raster buffer provided.\n");
         return NULL;
     }
-    size_t area = (size_t) (raster->width * raster->height);
-    size_t dataSize = area * 3;
+    usize area = (usize) (raster->width * raster->height);
+    usize dataSize = area * 3;
     uint8* res = (uint8*) malloc(dataSize);
     if(res == NULL)
     {
-        perror("ERROR: jm_raster_buffert_to_bmp_data: Failed to allocate memory.");
+        perror("ERROR: jm_raster_buffer_to_bmp_data: Failed to allocate memory.");
         return NULL;
     }
     for(int i = 0; i < raster->height; i++)
@@ -84,7 +84,7 @@ uint8* jm_raster_buffert_to_bmp_data(const JM_RasterBuffer* raster)
         for(int j = 0; j < raster->width; j++)
         {
             const JM_Color* fragment = &raster->data[i * raster->width + j];
-            size_t index = (size_t) ((i * raster->width + j) * 3);
+            usize index = (usize) ((i * raster->width + j) * 3);
             res[index] = fragment->b;
             res[index + 1] = fragment->g;
             res[index + 2] = fragment->r;

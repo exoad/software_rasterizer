@@ -8,7 +8,7 @@ JM_RasterBuffer* jm_create_raster_buffer(const int width, const int height)
 {
     assert(width > 0 && "jm_create_raster_buffer: Raster buffer width must be positive");
     assert(height > 0 && "jm_create_raster_buffer: Raster buffer height must be positive!");
-    JM_Color* data = (JM_Color*) malloc((size_t) (width * height) * sizeof(JM_Color));
+    JM_Color* data = (JM_Color*) malloc((usize) (width * height) * sizeof(JM_Color));
     if (data == NULL)
     {
         fprintf(stderr, "Failed to allocate memory to fit a new raster buffer with size %d, %d", width, height);
