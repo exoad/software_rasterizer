@@ -33,6 +33,7 @@ void jm_destroy_raster_buffer(JM_RasterBuffer* buffer)
     {
         free(buffer->data);
         buffer->data = NULL;
+        free(buffer);
     }
 }
 

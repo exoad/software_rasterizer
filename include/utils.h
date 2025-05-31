@@ -2,6 +2,7 @@
 #define __UTILS_H__
 
 #include <stdbool.h>
+#include <math.h>
 
 #define println(format, ...) printf(format "\n", ##__VA_ARGS__)
 
@@ -67,5 +68,15 @@ bool jm_triangles_encloses(const JM_Vec2 pt, const JM_Vec2 a, const JM_Vec2 b, c
 /// @param p3 point 3
 /// @return positive - p3 lies to the left of p1 and p2; negative - p3 lies to the right of p1 and p2; 0 - p1, p2, and p3 are collinear
 float jm_triangles_sign(const JM_Vec2 p1, const JM_Vec2 p2, const JM_Vec2 p3);
+/// @brief min of three float values
+static inline float jm_min3f(const float a, const float b, const float c)
+{
+    return fminf(a, fminf(b, c));
+}
+/// @brief max of three float values
+static inline float jm_max3f(const float a, const float b, const float c)
+{
+    return fmaxf(a, fmaxf(b, c));
+}
 
 #endif

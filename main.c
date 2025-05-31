@@ -8,12 +8,12 @@
 #include "chronos.h"
 
 #define RASTER_WIDTH 1920
-#define RASTER_HEIGHT 1920
+#define RASTER_HEIGHT 1080
 #define TRIANGLE_COUNT 256
 
 static JM_RasterBuffer* buffer = NULL;
 
-static float random_float(float min, float max)
+static inline float random_float(float min, float max)
 {
     return min + (float) rand() / RAND_MAX * (max - min);
 }
@@ -27,25 +27,26 @@ static void render()
             random_float(0.f, (float) buffer->height - 1.f)
         };
         const JM_Vec2 b = {
-            random_float(0.f, (float) buffer->width - 1.0f),
-            random_float(0.f, (float) buffer->height - 1.0f)
+            random_float(0.f, (float) buffer->width - 1.f),
+            random_float(0.f, (float) buffer->height - 1.f)
         };
         const JM_Vec2 c = {
             random_float(0.f, (float) buffer->width - 1.f),
             random_float(0.f, (float) buffer->height - 1.f)
         };
-        const JM_Color tri_color = jm_color_random();
-        println("Triangle %d: A=(%.2f, %.2f) B=(%.2f, %.2f) C=(%.2f, %.2f) Color=(%d,%d,%d)",
-               k + 1, a.x, a.y, b.x, b.y, c.x, c.y, tri_color.r, tri_color.g, tri_color.b);
-        for(int y = 0; y < buffer->height; y++)
-        {
-            for(int x = 0; x < buffer->width; x++)
-            {
-
-                if(jm_triangles_encloses((JM_Vec2) { (float)x, (float)y }, a, b, c))
-                    jm_set_raster_pixel(buffer, x, y, tri_color);
-            }
-        }
+        const JM_Color color = jm_color_random();
+        for(
+            int y = (int) jm_clampf(floorf(jm_min3f(a.y, b.y, c.y)), 0.f, (float) buffer->height - 1.f);
+            y <= (int) jm_clampf(ceilf(jm_max3f(a.y, b.y, c.y)), 0.f, (float) buffer->height - 1.f);
+            y++
+        )
+            for(
+                int x = (int) jm_clampf(floorf(jm_min3f(a.x, b.x, c.x)), 0.f, (float) buffer->width - 1.f);
+                x <= (int) jm_clampf(ceilf(jm_max3f(a.x, b.x, c.x)), 0.f, (float) buffer->width - 1.f);
+                x++
+            )
+                if(jm_triangles_encloses((JM_Vec2) { (float) x, (float) y }, a, b, c))
+                    jm_set_raster_pixel(buffer, x, y, color);
     }
 }
 

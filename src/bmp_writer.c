@@ -81,7 +81,7 @@ uint8* jm_raster_buffert_to_bmp_data(const JM_RasterBuffer* raster)
     }
     for(int i = 0; i < raster->height; i++)
     {
-        for(int j = 0; j < raster->height; j++)
+        for(int j = 0; j < raster->width; j++)
         {
             const JM_Color* fragment = &raster->data[i * raster->width + j];
             size_t index = (size_t) ((i * raster->width + j) * 3);
