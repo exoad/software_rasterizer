@@ -1,10 +1,11 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
-#include "resource_loaders/resource_loader.h"
 #include "managed_array.h"
+#include "utils.h"
+#include "resource_loaders/resource_loader.h"
 
 // ** .OBJ FILE LOADING **
 // A lot of the file format described from this great article: https://paulbourke.net/dataformats/obj/
@@ -16,26 +17,28 @@ typedef struct _ObjFaceCorner
     int vnIndex;
 } _ObjFaceCorner;
 
-JM_Scene* jm_resources_load_scene(const char* filePath, const JM_ResourceFormat format, JM_Arena* arena)
+JM_Scene *jm_resources_load_scene(const char *filePath, const JM_ResourceFormat format, JM_Arena *arena)
 {
-
     ASSERT_NOT_NULL(filePath);
     ASSERT_NOT_NULL(arena);
     if(format != JM_RES_FORMAT_OBJ)
     {
-        fprintf(stderr, "jm_resources_load_scene: Only OBJ format is supported in this implementation.\n");
+        printerr("%s", "Only OBJ format is supported in this implementation.");
+        fflush(stderr);
         return NULL;
     }
-    FILE* file = fopen(filePath, "r");
+    FILE *file = fopen(filePath, "r");
     if(file == NULL)
     {
-        fprintf(stderr, "jm_resources_load_scene: Failed to open the file %s\n", filePath);
+        printerr("Failed to open the file %s", filePath);
+        fflush(stderr);
         return NULL;
     }
-    JM_Scene* scene = (JM_Scene*) jm_arena_alloc(arena, sizeof(JM_Scene));
+    JM_Scene *scene = jm_arena_alloc(arena, sizeof(JM_Scene));
     if(scene == NULL)
     {
-        fprintf(stderr, "jm_resources_load_scene: Failed to allocate the scene with the supplied arena.\n");
+        printerr("%s", "Failed to allocate the scene with the supplied arena.");
+        fflush(stderr);
         fclose(file);
         return NULL;
     }
@@ -56,15 +59,17 @@ JM_Scene* jm_resources_load_scene(const char* filePath, const JM_ResourceFormat 
     jm_managed_array_push(&tempPositions, &dummy_vec3);
     jm_managed_array_push(&tempTextureCoordinates, &dummy_vec2);
     jm_managed_array_push(&tempNormals, &dummy_vec3);
+    __PRINT_STOP__
+    println("LENGTH: %lld", tempPositions.count);
     char line[1024];
     while(fgets(line, sizeof(line), file) != NULL)
     {
-        char* curr = line;
+        char *curr = line;
         while(isspace((unsigned char) *curr))
         {
             curr++;
         }
-        if (*curr == '#' || *curr == '\n' || *curr == '\0')
+        if(*curr == '#' || *curr == '\n' || *curr == '\0')
         {
             continue;
         }
@@ -90,7 +95,6 @@ JM_Scene* jm_resources_load_scene(const char* filePath, const JM_ResourceFormat 
             JM_Vec2 uv;
             if(sscanf(curr, "vt %f %f", &uv.x, &uv.y) >= 2)
             {
-
                 if(!jm_managed_array_push(&tempTextureCoordinates, &uv))
                 {
                     goto error_cleanup;
@@ -119,13 +123,13 @@ JM_Scene* jm_resources_load_scene(const char* filePath, const JM_ResourceFormat 
             {
                 rest_of_line = NULL;
                 _ObjFaceCorner fv = { 0, 0, 0 };
-                char* first_slash = strchr(token, '/');
+                char *first_slash = strchr(token, '/');
                 if(first_slash)
                 {
                     *first_slash = '\0';
                     fv.vIndex = atoi(token);
 
-                    char* second_slash = strchr(first_slash + 1, '/');
+                    char *second_slash = strchr(first_slash + 1, '/');
                     if(second_slash)
                     {
                         *second_slash = '\0';
@@ -185,18 +189,19 @@ JM_Scene* jm_resources_load_scene(const char* filePath, const JM_ResourceFormat 
                 jm_managed_array_free(&current_face_corners);
             }
         }
-
     }
     fclose(file);
     if(tempFaces.count == 0)
     {
-        fprintf(stderr, "Warning: OBJ file '%s' contained no faces. Returning empty scene.\n", filePath);
+        printerr("Warning: OBJ file '%s' contained no faces. Returning empty scene.", filePath);
+        fflush(stderr);
         goto success_cleanup;
     }
-    JM_Mesh* mesh = (JM_Mesh*) jm_arena_alloc(arena, sizeof(JM_Mesh));
+    JM_Mesh *mesh = jm_arena_alloc(arena, sizeof(JM_Mesh));
     if(!mesh)
     {
-        fprintf(stderr, "Error: Failed to allocate mesh for OBJ.\n");
+        printerr("%s", "Error: Failed to allocate mesh for OBJ.");
+        fflush(stderr);
         goto error_cleanup;
     }
     memset(mesh, 0, sizeof(JM_Mesh));
@@ -204,9 +209,9 @@ JM_Scene* jm_resources_load_scene(const char* filePath, const JM_ResourceFormat 
     mesh->name[sizeof(mesh->name) - 1] = '\0';
     usize total_final_vertices = 0;
     usize total_final_indices = 0;
-    for(usize i = 0; i < tempFaces.count; ++i)
+    for(usize i = 0;i < tempFaces.count;++i)
     {
-        JM_ManagedArray* face_corners_array = (JM_ManagedArray*) tempFaces.data + i;
+        JM_ManagedArray *face_corners_array = (JM_ManagedArray*) tempFaces.data + i;
         if(face_corners_array->count < 3)
         {
             continue;
@@ -219,26 +224,26 @@ JM_Scene* jm_resources_load_scene(const char* filePath, const JM_ResourceFormat 
     mesh->indices = (uint32_t*) jm_arena_alloc(arena, total_final_indices * sizeof(uint32_t));
     if(!mesh->vertices || !mesh->indices)
     {
-        fprintf(stderr, "Error: Failed to allocate final vertex/index buffers for mesh.\n");
+        printerr("%s", "Error: Failed to allocate final vertex/index buffers for mesh.");
         goto error_cleanup;
     }
     usize current_vertex_idx = 0;
     usize current_index_idx = 0;
-    for(usize i = 0; i < tempFaces.count; ++i)
+    for(usize i = 0;i < tempFaces.count;++i)
     {
-        JM_ManagedArray* face_corners_array = (JM_ManagedArray*) tempFaces.data + i;
+        JM_ManagedArray *face_corners_array = (JM_ManagedArray*) tempFaces.data + i;
         if(face_corners_array->count < 3)
         {
             jm_managed_array_free(face_corners_array);
             continue;
         }
-        for(usize j = 0; j < face_corners_array->count - 2; ++j)
+        for(usize j = 0;j < face_corners_array->count - 2;++j)
         {
             _ObjFaceCorner triangleCorners[3];
             triangleCorners[0] = ((_ObjFaceCorner*) face_corners_array->data)[0];
             triangleCorners[1] = ((_ObjFaceCorner*) face_corners_array->data)[j + 1];
             triangleCorners[2] = ((_ObjFaceCorner*) face_corners_array->data)[j + 2];
-            for(int k = 0; k < 3; ++k)
+            for(int k = 0;k < 3;++k)
             {
                 _ObjFaceCorner current_corner = triangleCorners[k];
                 assert(current_corner.vIndex >= 0 && (usize) current_corner.vIndex < tempPositions.count);
@@ -262,28 +267,27 @@ JM_Scene* jm_resources_load_scene(const char* filePath, const JM_ResourceFormat 
     scene->meshes = (JM_Mesh**) jm_arena_alloc(arena, sizeof(JM_Mesh*));
     if(!scene->meshes)
     {
-        fprintf(stderr, "Error: Failed to allocate mesh array for scene.\n");
+        printerr("%s", "Error: Failed to allocate mesh array for scene.");
+        fflush(stderr);
         goto error_cleanup;
     }
     scene->meshes[0] = mesh;
 
-success_cleanup:
-    jm_managed_array_free(&tempPositions);
+success_cleanup: jm_managed_array_free(&tempPositions);
     jm_managed_array_free(&tempTextureCoordinates);
     jm_managed_array_free(&tempNormals);
     jm_managed_array_free(&tempFaces);
     fclose(file);
     return scene;
 
-error_cleanup:
-    if(file)
+error_cleanup: if(file)
     {
         fclose(file);
     }
     return NULL;
 }
 
-void jm_resources_destroy_scene(JM_Scene* scene)
+void jm_resources_destroy_scene(JM_Scene *scene)
 {
     if(!scene)
     {
@@ -295,8 +299,9 @@ void jm_resources_destroy_scene(JM_Scene* scene)
     }
     else
     {
-        fprintf(stderr, "Warning: jm_resources_destroy_scene called on a scene without an associated arena. Attempting individual free.\n");
-        for(uint32_t i = 0; i < scene->meshesCount; ++i)
+        printerr("%s", "Called on a scene without an associated arena. Attempting individual free.");
+        fflush(stderr);
+        for(uint32_t i = 0;i < scene->meshesCount;++i)
         {
             if(scene->meshes[i])
             {

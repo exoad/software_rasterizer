@@ -9,12 +9,12 @@
 /// @param width width of the buffer data
 /// @param height height of the buffer data
 /// @return the raster buffer with the data
-JM_RasterBuffer* jm_prebaked_uvmap(const int width, const int height);
+JM_RasterBuffer* jm_prebaked_uvmap(int width, int height);
 /// @brief Creates a raster buffer with a singular color (good starting point as opposed to using the raw create raster buffer because there might be extra data from C's memory allocation
 /// @param color the color to set to
 /// @param width width of the buffer data
 /// @param height height of the buffer data
 /// @return the raster buffer with the filled color
-JM_RasterBuffer* jm_prebaked_filled(const JM_Color color, const int width, const int height);
+JM_RasterBuffer* jm_prebaked_filled(JM_Color color, int width, int height);
 
 #endif

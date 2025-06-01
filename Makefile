@@ -1,12 +1,13 @@
 CC = gcc
 ASAN_FLAGS =
 ifeq ($(ASAN),1)
-    ASAN_FLAGS = -fsanitize=address -fsanitize-trap
+    ASAN_FLAGS = -fsanitize=address -fsanitize=undefined -fsanitize-trap=all
 else ifeq ($(filter asan,$(MAKECMDGOALS)),asan)
-    ASAN_FLAGS = -fsanitize=address -fsanitize-trap
+    ASAN_FLAGS = -fsanitize=address -fsanitize=undefined -fsanitize-trap=all
 endif
 
-CFLAGS = -Wall -Wextra -Wpedantic -Wcast-align -Wconversion -Wunused -Wshadow -O3 $(ASAN_FLAGS) -std=c17 -Iinclude
+CFLAGS = -Wall -Wextra -Wpedantic -Wcast-align -Wconversion -Wunused -Wshadow -O3 $(ASAN_FLAGS) -std=c17 -Iinclude -Iinclude/resource_loaders
+
 LDFLAGS = $(ASAN_FLAGS)
 
 BIN = software_rasterizer
@@ -15,7 +16,7 @@ SRCDIR = src
 INCDIR = include
 OBJDIR = obj
 
-C_FILES = $(wildcard *.c) $(wildcard $(SRCDIR)/*.c)
+C_FILES = $(wildcard *.c) $(wildcard $(SRCDIR)/*.c) $(wildcard $(SRCDIR)/resource_loaders/*.c)
 
 OBJ_FILES = $(patsubst %.c,$(OBJDIR)/%.o,$(notdir $(C_FILES)))
 
@@ -31,6 +32,9 @@ $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/resource_loaders/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

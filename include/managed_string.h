@@ -11,7 +11,7 @@ typedef struct JM_ManagedString
     usize length;
 } JM_ManagedString;
 /// @brief Returns a view of a sequence of characters within a larger block
-static inline JM_ManagedString jm_managed_string_span(char* beg, char* end)
+static inline JM_ManagedString jm_managed_string_span(char* beg, const char* end)
 {
     JM_ManagedString res = { 0 };
     res.data = beg;
@@ -19,7 +19,7 @@ static inline JM_ManagedString jm_managed_string_span(char* beg, char* end)
     return res;
 }
 /// @brief Check if the two strings are equal
-static inline bool jm_managed_string_equals(JM_ManagedString a, JM_ManagedString b)
+static inline bool jm_managed_string_equals(const JM_ManagedString a, const JM_ManagedString b)
 {
     return a.length == b.length && (!a.length || !memcmp(a.data, b.data, a.length));
 }

@@ -1,10 +1,7 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-#include <stdbool.h>
 #include <math.h>
-
-#include "geometry.h"
 
 #define println(format, ...) printf(format "\n", ##__VA_ARGS__)
 
@@ -13,12 +10,12 @@
 
 
 /// @brief min of three float values
-static inline float jm_min3f(const float a, const float b, const float c)
+static float jm_min3f(const float a, const float b, const float c)
 {
     return fminf(a, fminf(b, c));
 }
 /// @brief max of three float values
-static inline float jm_max3f(const float a, const float b, const float c)
+static float jm_max3f(const float a, const float b, const float c)
 {
     return fmaxf(a, fmaxf(b, c));
 }

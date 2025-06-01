@@ -12,7 +12,7 @@ typedef struct JM_ManagedArray {
     JM_Arena* arena;
 } JM_ManagedArray;
 /// @brief Initializes a Managed array with the supplied parameters
-static inline void jm_managed_array_create(JM_ManagedArray* array, usize elementSize, JM_Arena* arena)
+static void jm_managed_array_create(JM_ManagedArray* array, const usize elementSize, JM_Arena* arena)
 {
     array->data = NULL;
     array->count = 0;
@@ -21,15 +21,15 @@ static inline void jm_managed_array_create(JM_ManagedArray* array, usize element
     array->arena = arena;
 }
 /// @brief Inserts a new element to the end of the dynamic growing array
-static inline bool jm_managed_array_push(JM_ManagedArray* array, const void* element)
+static bool jm_managed_array_push(JM_ManagedArray* array, const void* element)
 {
     if(array->count >= array->capacity)
     {
-        usize capacity = (array->capacity == 0) ? 16 : array->capacity * 2;
+        const usize capacity = (array->capacity == 0) ? 16 : array->capacity * 2;
         void* newPtr = jm_arena_alloc(array->arena, capacity * array->elementSize);
         if(newPtr == NULL)
         {
-            fprintf(stderr, "jm_managed_array_push: Failed to allocate the dynamic array using the arena.");
+            printerr("%s", "Failed to allocate the dynamic array using the arena.");
             return false;
         }
         if(array->data)
@@ -47,13 +47,9 @@ static inline bool jm_managed_array_push(JM_ManagedArray* array, const void* ele
     return true;
 }
 /// @brief Releases the resources used by the managed array
-static inline void jm_managed_array_free(JM_ManagedArray* array)
+static void jm_managed_array_free(JM_ManagedArray* array)
 {
-    if(array->data)
-    {
-        free(array->data);
-        array->data = NULL;
-    }
+    array->data = NULL;
     array->count = 0;
     array->capacity = 0;
 }

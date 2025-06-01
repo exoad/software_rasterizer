@@ -3,7 +3,6 @@
 
 #include "def.h"
 
-
 /// @brief stores a color in 0-255 format as RGBA
 typedef struct
 {

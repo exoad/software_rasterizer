@@ -6,8 +6,8 @@ JM_RasterBuffer* jm_prebaked_uvmap(const int width, const int height)
     for(int i = 0; i < buffer->height; i++)
         for(int j = 0; j < buffer->width; j++)
             jm_set_raster_pixel(buffer, j, i, (JM_Color) {
-                .r = (uint8) (((float) j / ((float) buffer->width - 1.0f)) * 255.0f),
-                .g = (uint8) (((float) i / ((float) buffer->height - 1.0f)) * 255.0f),
+                .r = (uint8) ((float) j / ((float) buffer->width - 1.0f) * 255.0f),
+                .g = (uint8) ((float) i / ((float) buffer->height - 1.0f) * 255.0f),
                 .b = 0,
                 .a = 255
             });

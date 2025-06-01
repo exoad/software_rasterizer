@@ -3,22 +3,21 @@
 
 #include <time.h>
 
-#include "def.h"
 
 typedef clock_t JM_Timestamp;
 
 /// @brief acquire a timing instance
 /// @return a timestamp
-static inline JM_Timestamp jm_chronos_start()
+static JM_Timestamp jm_chronos_start()
 {
     return clock();
 }
 /// @brief ends the timing instance
 /// @param start offset from
 /// @return the seconds since in cpu time
-static inline float jm_chronos_end(const JM_Timestamp start)
+static float jm_chronos_end(const JM_Timestamp start)
 {
-    return ((float) (clock() - start)) / CLOCKS_PER_SEC;
+    return (float) (clock() - start) / CLOCKS_PER_SEC;
 }
 
 #define JM_TIMED_BLOCK(block_statements)                             \
