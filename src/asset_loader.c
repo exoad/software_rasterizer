@@ -19,8 +19,8 @@ typedef struct _ObjFaceCorner
 
 JM_Scene *jm_resources_load_scene(const char *filePath, const JM_ResourceFormat format, JM_Arena *arena)
 {
-    ASSERT_NOT_NULL(filePath);
-    ASSERT_NOT_NULL(arena);
+    ensure(filePath);
+    ensure(arena);
     if(format != JM_RES_FORMAT_OBJ)
     {
         printerr("%s", "Only OBJ format is supported in this implementation.");
@@ -280,10 +280,8 @@ success_cleanup: jm_managed_array_free(&tempPositions);
     fclose(file);
     return scene;
 
-error_cleanup: if(file)
-    {
-        fclose(file);
-    }
+error_cleanup:
+    fclose(file);
     return NULL;
 }
 

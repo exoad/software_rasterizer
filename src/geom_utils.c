@@ -4,28 +4,45 @@
 #include <stdlib.h>
 
 #include "geometry.h"
+#include "utils.h"
 
 float jm_vec2_dot(const JM_Vec2* a, const JM_Vec2* b)
 {
-    assert(a != NULL && b != NULL);
+    if(a == NULL || b == NULL)
+    {
+        printerr("%s", "Cannot perform a dot product with a null pointer.");
+        return 0.f;
+    }
     return (a->x * b->x) + (a->y * b->y);
 }
 
 float jm_vec3_dot(const JM_Vec3* a, const JM_Vec3* b)
 {
-    assert(a != NULL && b != NULL);
+    if(a == NULL || b == NULL)
+    {
+        printerr("%s", "Cannot perform a dot product with a null pointer.");
+        return 0.f;
+    }
     return (a->x * b->x) + (a->y * b->y) + (a->z * b->z);
 }
 
 float jm_vec2_cross(const JM_Vec2* a, const JM_Vec2* b)
 {
-    assert(a != NULL && b != NULL);
+    if(a == NULL || b == NULL)
+    {
+        printerr("%s", "Cannot perform a cross product with a null pointer.");
+        return 0.f;
+    }
     return (a->x * b->y) - (a->y * b->x);
 }
 
 JM_Vec3 jm_vec3_cross(const JM_Vec3* a, const JM_Vec3* b)
 {
-    assert(a != NULL && b != NULL);
+    if(a == NULL || b == NULL)
+    {
+        printerr("%s", "Cannot perform a cross product with a null pointer.");
+        return JM_VEC3_ZERO;
+    }
     return (JM_Vec3)
     {
         (a->y * b->z) - (a->z * b->y),
@@ -54,7 +71,7 @@ char* jm_vec2_to_string(const JM_Vec2* vec)
     if (vec == NULL)
         return NULL;
     const int buffer_size = 50;
-    char* str = (char*) malloc((usize) buffer_size * sizeof(char));
+    char* str = malloc((usize) buffer_size * sizeof(char));
     if (str == NULL)
     {
         printerr("%s", "Failed to allocate memory for JM_Vec2 string");

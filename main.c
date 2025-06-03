@@ -1,12 +1,14 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
 #include "allocator.h"
-#include "renderer.h"
 #include "bmp_writer.h"
-#include "prebaked_rasters.h"
 #include "chronos.h"
+#include "prebaked_rasters.h"
+#include "renderer.h"
+#include "utils.h"
 #include "resource_loaders/resource_loader.h"
 
 #define RASTER_WIDTH 1920
@@ -15,9 +17,9 @@
 
 static JM_RasterBuffer *buffer = NULL;
 
-static inline float random_float(const float min, const float max)
+static float random_float(const float min, const float max)
 {
-    return min + (float) rand() / RAND_MAX * (max - min);
+    return min + (float) rand() / RAND_MAX * (max - min); // NOLINT(cert-msc30-c, cert-msc50-cpp)
 }
 
 static void render()
@@ -54,7 +56,7 @@ static void render()
 
 static void _test_write_bmp()
 {
-    srand((unsigned int) time(NULL));
+    srand((unsigned int) time(NULL)); // NOLINT(cert-msc30-c, cert-msc51-cpp)
     buffer = jm_prebaked_filled(JM_COLOR_BLACK, RASTER_WIDTH, RASTER_HEIGHT);
     ASSERT_NOT_NULL(buffer);
     println("Rendering took %.0f ms (CPU Time)", JM_TIMED_BLOCK({ render(); }) * 1000);
@@ -71,10 +73,10 @@ static void _test_write_bmp()
 
 int main()
 {
-    println("Hello");
+    println("%s", "Hello");
     JM_Arena *arena = { 0 };
     jm_arena_init(arena, 0);
-    println("Hello Again");
+    println("%s", "Hello Again");
     JM_Scene *scene = jm_resources_load_scene("resources/cube.obj", JM_RES_FORMAT_OBJ, arena);
-    println("Done.");
+    println("Done. %p", (void* ) scene);
 }

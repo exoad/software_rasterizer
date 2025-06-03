@@ -5,9 +5,8 @@
 
 #define println(format, ...) printf(format "\n", ##__VA_ARGS__)
 
-#define JM_VEC2_ZERO ((GM_Vec2){0.0f, 0.0f})
-#define JM_VEC3_ZERO ((GM_Vec3){0.0f, 0.0f, 0.0f})
-
+#define JM_VEC2_ZERO ((JM_Vec2){0.0f, 0.0f})
+#define JM_VEC3_ZERO ((JM_Vec3){0.0f, 0.0f, 0.0f})
 
 /// @brief min of three float values
 static float jm_min3f(const float a, const float b, const float c)

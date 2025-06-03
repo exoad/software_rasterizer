@@ -1,6 +1,8 @@
 #ifndef __MANAGED_ARRAY_H__
 #define __MANAGED_ARRAY_H__
 
+#include <stdbool.h>
+
 #include "allocator.h"
 
 /// @brief A dynamic array that relies on an arena to manage memory

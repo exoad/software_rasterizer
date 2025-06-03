@@ -60,16 +60,10 @@ void jm_bmp_write(const JM_BMP_Write_ArgDesc *args)
 
 uint8 *jm_raster_buffer_to_bmp_data(const JM_RasterBuffer *raster)
 {
-    ASSERT_NOT_NULL(raster);
-    ASSERT_NOT_NULL(raster->data);
+    ensure(raster);
+    ensure(raster->data);
     assert(raster->width > 0 && "jm_raster_buffer_to_bmp_data: Raster 'width' must be positive!");
     assert(raster->height > 0 && "jm_raster_buffer_to_bmp_data: Raster 'height' must be positive!");
-    if(raster == NULL || raster->data == NULL ||
-       raster->width <= 0 || raster->height <= 0)
-    {
-        printerr("%s", "Invalid raster buffer provided.");
-        return NULL;
-    }
     const usize area = (usize) (raster->width * raster->height);
     const usize dataSize = area * 3;
     uint8 *res = (uint8*) malloc(dataSize);

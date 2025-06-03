@@ -59,7 +59,7 @@ static JM_ArenaBlock* jm_arena_create_block(const usize minCapacity)
 /// @return
 static void* jm_arena_alloc_aligned(JM_Arena* arena, const usize size, const usize align)
 {
-    ASSERT_NOT_NULL(arena);
+    ensure(arena);
     if(align & (align - 1))
     {
         printerr("%s", "Failed to allocate because the alignment is not a power of 2");
