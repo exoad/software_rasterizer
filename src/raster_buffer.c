@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "renderer.h"
 
-JM_RasterBuffer *jm_create_raster_buffer(const int width, const int height)
+JM_RasterBuffer *jm_create_raster_buffer(const I32 width, const I32 height)
 {
     assert(width > 0 && "jm_create_raster_buffer: Raster buffer width must be positive");
     assert(height > 0 && "jm_create_raster_buffer: Raster buffer height must be positive!");
@@ -26,7 +26,7 @@ JM_RasterBuffer *jm_create_raster_buffer(const int width, const int height)
     return buffer;
 }
 
-void jm_destroy_raster_buffer(JM_RasterBuffer *buffer)
+U0 jm_destroy_raster_buffer(JM_RasterBuffer *buffer)
 {
     if(buffer != NULL)
     {
@@ -36,7 +36,7 @@ void jm_destroy_raster_buffer(JM_RasterBuffer *buffer)
     }
 }
 
-JM_Color jm_get_raster_pixel(const JM_RasterBuffer *buffer, const int x, const int y)
+JM_Color jm_get_raster_pixel(const JM_RasterBuffer *buffer, const I32 x, const I32 y)
 {
     assert(buffer != NULL && "jm_get_raster_pixel: Buffer cannot be NULL!");
     assert(buffer->data != NULL && "jm_get_raster_pixel: Buffer data cannot be NULL!");
@@ -45,7 +45,7 @@ JM_Color jm_get_raster_pixel(const JM_RasterBuffer *buffer, const int x, const i
     return buffer->data[y * buffer->width + x];
 }
 
-void jm_set_raster_pixel(const JM_RasterBuffer *buffer, const int x, const int y, const JM_Color value)
+U0 jm_set_raster_pixel(const JM_RasterBuffer *buffer, const I32 x, const I32 y, const JM_Color value)
 {
     ensure(buffer);
     ensure(buffer->data);

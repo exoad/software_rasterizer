@@ -4,7 +4,7 @@
 #include "def.h"
 #include "utils.h"
 
-float jm_clampf(const float value, const float min, const float max)
+F32 jm_clampf(const F32 value, const F32 min, const F32 max)
 {
     assert(min <= max && "jm_clampf: min value cannot be greater than max value!");
     if(min > max)

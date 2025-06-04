@@ -8,13 +8,13 @@
 #define JM_VEC2_ZERO ((JM_Vec2){0.0f, 0.0f})
 #define JM_VEC3_ZERO ((JM_Vec3){0.0f, 0.0f, 0.0f})
 
-/// @brief min of three float values
-static float jm_min3f(const float a, const float b, const float c)
+/// @brief min of three F32 values
+static F32 jm_min3f(const F32 a, const F32 b, const F32 c)
 {
     return fminf(a, fminf(b, c));
 }
-/// @brief max of three float values
-static float jm_max3f(const float a, const float b, const float c)
+/// @brief max of three F32 values
+static F32 jm_max3f(const F32 a, const F32 b, const F32 c)
 {
     return fmaxf(a, fmaxf(b, c));
 }

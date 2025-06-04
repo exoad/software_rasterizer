@@ -15,9 +15,9 @@ static JM_Timestamp jm_chronos_start()
 /// @brief ends the timing instance
 /// @param start offset from
 /// @return the seconds since in cpu time
-static float jm_chronos_end(const JM_Timestamp start)
+static F32 jm_chronos_end(const JM_Timestamp start)
 {
-    return (float) (clock() - start) / CLOCKS_PER_SEC;
+    return (F32) (clock() - start) / CLOCKS_PER_SEC;
 }
 
 #define JM_TIMED_BLOCK(block_statements)                             \

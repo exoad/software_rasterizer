@@ -17,49 +17,49 @@
 
 static JM_RasterBuffer *buffer = NULL;
 
-static float random_float(const float min, const float max)
+static F32 random_F32(const F32 min, const F32 max)
 {
-    return min + (float) rand() / RAND_MAX * (max - min); // NOLINT(cert-msc30-c, cert-msc50-cpp)
+    return min + (F32) rand() / RAND_MAX * (max - min); // NOLI32(cert-msc30-c, cert-msc50-cpp)
 }
 
-static void render()
+static U0 render()
 {
-    for(int k = 0;k < TRIANGLE_COUNT;k++)
+    for(I32 k = 0;k < TRIANGLE_COUNT;k++)
     {
         const JM_Vec2 a = {
-            random_float(0.f, (float) buffer->width - 1.f),
-            random_float(0.f, (float) buffer->height - 1.f)
+            random_F32(0.f, (F32) buffer->width - 1.f),
+            random_F32(0.f, (F32) buffer->height - 1.f)
         };
         const JM_Vec2 b = {
-            random_float(0.f, (float) buffer->width - 1.f),
-            random_float(0.f, (float) buffer->height - 1.f)
+            random_F32(0.f, (F32) buffer->width - 1.f),
+            random_F32(0.f, (F32) buffer->height - 1.f)
         };
         const JM_Vec2 c = {
-            random_float(0.f, (float) buffer->width - 1.f),
-            random_float(0.f, (float) buffer->height - 1.f)
+            random_F32(0.f, (F32) buffer->width - 1.f),
+            random_F32(0.f, (F32) buffer->height - 1.f)
         };
         const JM_Color color = jm_color_random();
         for(
-            int y = (int) jm_clampf(floorf(jm_min3f(a.y, b.y, c.y)), 0.f, (float) buffer->height - 1.f);
-            y <= (int) jm_clampf(ceilf(jm_max3f(a.y, b.y, c.y)), 0.f, (float) buffer->height - 1.f);
+            I32 y = (I32) jm_clampf(floorf(jm_min3f(a.y, b.y, c.y)), 0.f, (F32) buffer->height - 1.f);
+            y <= (I32) jm_clampf(ceilf(jm_max3f(a.y, b.y, c.y)), 0.f, (F32) buffer->height - 1.f);
             y++
         )
             for(
-                int x = (int) jm_clampf(floorf(jm_min3f(a.x, b.x, c.x)), 0.f, (float) buffer->width - 1.f);
-                x <= (int) jm_clampf(ceilf(jm_max3f(a.x, b.x, c.x)), 0.f, (float) buffer->width - 1.f);
+                I32 x = (I32) jm_clampf(floorf(jm_min3f(a.x, b.x, c.x)), 0.f, (F32) buffer->width - 1.f);
+                x <= (I32) jm_clampf(ceilf(jm_max3f(a.x, b.x, c.x)), 0.f, (F32) buffer->width - 1.f);
                 x++
             )
-                if(jm_triangles_encloses((JM_Vec2){ (float) x, (float) y }, a, b, c))
+                if(jm_triangles_encloses((JM_Vec2){ (F32) x, (F32) y }, a, b, c))
                     jm_set_raster_pixel(buffer, x, y, color);
     }
 }
 
-static void _test_write_bmp()
+static U0 _test_write_bmp()
 {
-    srand((unsigned int) time(NULL)); // NOLINT(cert-msc30-c, cert-msc51-cpp)
+    srand((U32) time(NULL)); // NOLI32(cert-msc30-c, cert-msc51-cpp)
     buffer = jm_prebaked_filled(JM_COLOR_BLACK, RASTER_WIDTH, RASTER_HEIGHT);
     ASSERT_NOT_NULL(buffer);
-    println("Rendering took %.0f ms (CPU Time)", JM_TIMED_BLOCK({ render(); }) * 1000);
+    prI32ln("Rendering took %.0f ms (CPU Time)", JM_TIMED_BLOCK({ render(); }) * 1000);
     jm_bmp_write(
                  &(JM_BMP_Write_ArgDesc)
                  {
@@ -71,12 +71,12 @@ static void _test_write_bmp()
                  });
 }
 
-int main()
+I32 main()
 {
-    println("%s", "Hello");
+    prI32ln("%s", "Hello");
     JM_Arena *arena = { 0 };
     jm_arena_init(arena, 0);
-    println("%s", "Hello Again");
+    prI32ln("%s", "Hello Again");
     JM_Scene *scene = jm_resources_load_scene("resources/cube.obj", JM_RES_FORMAT_OBJ, arena);
-    println("Done. %p", (void* ) scene);
+    prI32ln("Done. %p", (U0* ) scene);
 }

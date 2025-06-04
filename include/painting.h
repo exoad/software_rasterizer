@@ -7,13 +7,13 @@
 typedef struct
 {
     /// @brief red channel
-    uint8 r;
+    U8 r;
     /// @brief green channel
-    uint8 g;
+    U8 g;
     /// @brief blue channel
-    uint8 b;
+    U8 b;
     /// @brief alpha channel
-    uint8 a;
+    U8 a;
 } JM_Color;
 /// @brief returns a random color with the alpha channel locked at 255
 /// @return color

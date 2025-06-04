@@ -7,9 +7,9 @@
 JM_Color jm_color_random()
 {
     return (JM_Color) {
-        .r = (uint8) rand(), // NOLINT(cert-msc30-c, cert-msc50-cpp)
-        .g = (uint8) rand(), // NOLINT(cert-msc30-c, cert-msc50-cpp)
-        .b = (uint8) rand(), // NOLINT(cert-msc30-c, cert-msc50-cpp)
+        .r = (U8) rand(), // NOLINT(cert-msc30-c, cert-msc50-cpp)
+        .g = (U8) rand(), // NOLINT(cert-msc30-c, cert-msc50-cpp)
+        .b = (U8) rand(), // NOLINT(cert-msc30-c, cert-msc50-cpp)
         .a = 255
     };
 }

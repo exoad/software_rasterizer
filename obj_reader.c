@@ -4,9 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "def.h"
+#define STB_DS_IMPLEMENTATION
 
-#define TARGET_FILE "cube.obj"
+#include "def.h"
+#include "stb_ds.h"
+
+#define TARGET_FILE "icosphere.obj"
 #define BUFFER_SIZE 512
 
 // -----------------------------------------------------
@@ -89,7 +92,7 @@ I8* facecorner_to_string(const FaceCorner* face)
         printerr("%s", "Faild to alloc memory :(");
         return NULL;
     }
-    if(snprintf(buffer, (Sz) 40, "%lld/%lld/%lld", face->vIndex, face->vtIndex, face->vnIndex))
+    if(snprintf(buffer, (Sz) 40, "%lld/%lld/%lld", face->vIndex, face->vtIndex, face->vnIndex) < 0)
     {
         free(buffer);
         return NULL;
@@ -107,30 +110,10 @@ static void skip_whitespace(I8** ptr)
     }
 }
 
-static I64 parse_single_face_value(I8** ptr)
-{
-    I8* end;
-    errno = 0;
-    const I64 res = strtol(*ptr, &end, 10);
-    if(*ptr == end)
-    {
-        printerr("Found no integer. Got '%s'", *ptr);
-        return 0;
-    }
-    if(errno == ERANGE || res > INT_MAX || res < INT_MIN)
-    {
-        printerr("Received invalid integer. Got: '%s'", *ptr);
-        return 0;
-    }
-    *ptr = end;
-    return   res;
-}
-
 // -----------------------------------------------------
 
 I32 main(U0)
 {
-    println("%s", "Hello World!");
     FILE* file = fopen(TARGET_FILE, "r");
     if (!file)
     {
@@ -202,71 +185,95 @@ I32 main(U0)
                 // texture + normals 4. f <v_1>/<t_1>/<n_1> <v_2>/<t_2>/<n_2> ... <v_n>/<t_n>/<n_n>
             	else if(strcmp(commandBuffer, "f") == 0)
                 {
+                    FaceCorner* corners = NULL;
                    	I8* ptr;
                 	I8* tokens = strtok_r(line, " ", &ptr);
-					I32 facesCounter = 0;
                    	while(tokens != NULL) // first split the string by spaces to denote the individual faces
                    	{
 						FaceCorner corner = { 0 };
-						// if counter reaches 2 it means either uv coords OR normals
-						// if counter reaches 3 it means uv coords and normals
-						// if counter reaches 1 it means only vertex
-						I32 counter = 0;
-						// take each token from the previous delimiting move and
-						// use forward slashes ("/") as the next delimiter to split the string further.
-						I8* pos = tokens;
-						I8* slashDelimPtr;
-						I64 value = 0;
-						// this part loops through on single face corner
-						// AKA the part delimited by a space (see the definition of FaceCorner)
-						while(*pos != '\0') // strtok and strok_r insert the null terminator for the parts where it
-											// the string up and is an easy way to check :)
-						{
-							counter++; // count how many numbers are parsed
-							slashDelimPtr = strstr(pos, "/");
-							if(slashDelimPtr == NULL)
-							{
-								value = parse_single_face_value(&pos);
-								break;
-							}
-							Sz tokenLength = slashDelimPtr - pos;
-							if(tokenLength == 0)
-							{
-								// empty token, found nothing
-								// for example with the accepted format of only vertex normals
-								//
-								// "4//5"
-								//   ^
-								// empty texture uv
-								printf("%s", " ,");
-							}
-							else
-							{
-								I8* nextToken = malloc(tokenLength + 1);
-								strncpy(nextToken, pos, tokenLength);
-								nextToken[tokenLength] = '\0';
-								value = parse_single_face_value(&nextToken);
-							}
-							pos = slashDelimPtr + 1; // move the delimiter pointer for the next set
-							if(counter == 1)
-							{
-								corner.vIndex = value;
-							}
-							else if(counter == 2)
-							{
-								corner.vnIndex = value;
-							}
-							else if(counter == 3)
-							{
-								corner.vtIndex = value;
-							}
-						}
-						printf("%s ", facecorner_to_string(&corner));
+                        I32 result_v = sscanf(tokens, "%lld", &corner.vIndex);
+                        I32 result_vt = sscanf(tokens, "%lld/%lld", &corner.vIndex, &corner.vtIndex);
+                        I32 result_vn = sscanf(tokens, "%lld//%lld", &corner.vIndex, &corner.vnIndex);
+                        I32 result_vtn = sscanf(tokens, "%lld/%lld/%lld", &corner.vIndex, &corner.vtIndex, &corner.vnIndex);
+                        if (!(result_vtn == 3 || result_vn == 2 || result_vt == 2 || result_v == 1))
+                        {
+                            printerr("Failed to part face corner token at %d. Got %s", i, tokens);
+                            return EXIT_FAILURE;
+                        }
+                        //
+                        // +--- original approach using strtol without using sscanf ---+
+                        //
+						// // if counter reaches 2 it means either uv coords OR normals
+						// // if counter reaches 3 it means uv coords and normals
+						// // if counter reaches 1 it means only vertex
+						// I32 counter = 0;
+						// // take each token from the previous delimiting move and
+						// // use forward slashes ("/") as the next delimiter to split the string further.
+						// I8* pos = tokens;
+						// I8* slashDelimPtr;
+						// I64 value = 0;
+						// // this part loops through on single face corner
+						// // AKA the part delimited by a space (see the definition of FaceCorner)
+						// while(*pos != '\0') // strtok and strok_r insert the null terminator for the parts where it
+						// 					// the string up and is an easy way to check :)
+						// {
+						// 	counter++; // count how many numbers are parsed
+						// 	slashDelimPtr = strstr(pos, "/");
+                        //     bool requiresBreak = false;
+						// 	if(slashDelimPtr == NULL)
+						// 	{
+						// 		value = parse_single_face_value(&pos);
+                        //         requiresBreak = true;
+						// 	}
+                        //     else
+                        //     {
+                        //         Sz tokenLength = slashDelimPtr - pos;
+                        //         if(tokenLength == 0)
+                        //         {
+                        //             // empty token, found nothing
+                        //             // for example with the accepted format of only vertex normals
+                        //             //
+                        //             // "4//5"
+                        //             //   ^
+                        //             // empty texture uv
+                        //             printf("%s", " ,");
+                        //         }
+                        //         else
+                        //         {
+                        //             I8* nextToken = malloc(tokenLength + 1);
+                        //             strncpy(nextToken, pos, tokenLength);
+                        //             nextToken[tokenLength] = '\0';
+                        //             value = parse_single_face_value(&nextToken);
+                        //         }
+						// 	    pos = slashDelimPtr + 1; // move the delimiter pointer for the next set
+                        //     }
+						// 	if(counter == 1)
+						// 	{
+						// 		corner.vIndex = value;
+						// 	}
+						// 	else if(counter == 2)
+						// 	{
+						// 		corner.vtIndex = value;
+						// 	}
+						// 	else if(counter == 3)
+						// 	{
+						// 		corner.vnIndex = value;
+						// 	}
+                        //     if(requiresBreak)
+                        //     {
+                        //         break;
+                        //     }
+                        //     value = 0;
+						// }
 						tokens = strtok_r(NULL, " ", &ptr);
-						facesCounter++;
-						counter = 0;
-                   	}
-					println("\n%s (%d)", "-------------------------", facesCounter);
+                        arrput(corners, corner);
+                    }
+                    printf("%d: f ", i);
+                    for(int ix = 0; ix < arrlen(corners); ix++)
+                    {
+                        printf("%s ", facecorner_to_string(&corners[ix]));
+                    }
+                    printf("\n");
                 }
                 else
                 {

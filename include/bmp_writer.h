@@ -9,21 +9,21 @@
 /// @brief BMP function data
 typedef struct
 {
-    const char* fileName;
-    int width;
-    int height;
-    uint8* data;
+    const I8* fileName;
+    I32 width;
+    I32 height;
+    U8* data;
     /// @brief 1 = monochrome, 4bit, 8bit, 16bit, 24bit
-    uint8 bitsPerPixel;
+    U8 bitsPerPixel;
 } JM_BMP_Write_ArgDesc;
 
 /// @brief  Writes a BMP file given the proper information.
 /// @param args creation struct to use with named construction
-void jm_bmp_write(const JM_BMP_Write_ArgDesc* args);
+U0 jm_bmp_write(const JM_BMP_Write_ArgDesc* args);
 
 /// @brief Converts a raster buffer into a new 24-bit BGR format for usage with bmp writing.
 /// @param raster buffer
 /// @return pointer to the buffer, NULL if creation failed softly.
-uint8* jm_raster_buffer_to_bmp_data(const JM_RasterBuffer* raster);
+U8* jm_raster_buffer_to_bmp_data(const JM_RasterBuffer* raster);
 
 #endif

@@ -10,8 +10,8 @@ typedef enum JM_ResourceFormat
     JM_RES_FORMAT_OBJ
 } JM_ResourceFormat;
 
-JM_Scene* jm_resources_load_scene(const char* filePath, JM_ResourceFormat format, JM_Arena* arena);
+JM_Scene* jm_resources_load_scene(const I8* filePath, JM_ResourceFormat format, JM_Arena* arena);
 
-void jm_resources_destroy_scene(JM_Scene* scene);
+U0 jm_resources_destroy_scene(JM_Scene* scene);
 
 #endif
