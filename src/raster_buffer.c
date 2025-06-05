@@ -51,12 +51,12 @@ U0 jm_set_raster_pixel(const JM_RasterBuffer *buffer, const I32 x, const I32 y, 
     ensure(buffer->data);
     if(x >= 0 && x < buffer->width)
     {
-        printerr("X coordinate is out of bounds!");
+        printerr("%s", "X coordinate is out of bounds!");
         return;
     }
     if(y >= 0 && y < buffer->height)
     {
-        printerr("Y coordinate is out of bounds!");
+        printerr("%s", "Y coordinate is out of bounds!");
         return;
     }
     buffer->data[y * buffer->width + x] = value;

@@ -1,4 +1,6 @@
 #include "painting.h"
+#include "utils.h"
+#include "geometry.h"
 
 #include <stdlib.h>
 
@@ -26,3 +28,13 @@ const JM_Color JM_COLOR_GRAY              = { .r = 128, .g = 128, .b = 128, .a =
 const JM_Color JM_COLOR_LIGHT_GRAY        = { .r = 192, .g = 192, .b = 192, .a = 255 };
 const JM_Color JM_COLOR_DARK_GRAY         = { .r = 64 , .g = 64 , .b = 64 , .a = 255 };
 const JM_Color JM_COLOR_TRANSPARENT_BLACK = { .r = 0  , .g = 0  , .b = 0  , .a = 0   } ;
+
+JM_Vec3 jm_color_to_vec3(const JM_Color color)
+{
+    return (JM_Vec3) { .x = color.r, .y = color.g, .z = color.b };
+}
+
+JM_Color jm_vec3_to_color(const JM_Vec3 vec3)
+{
+    return (JM_Color) { .r = vec3.x, .g = vec3.y, .b = vec3.z, .a = 255 };
+}

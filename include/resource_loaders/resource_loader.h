@@ -1,17 +1,18 @@
 #ifndef __RESOURCE_LOADER_H__
 #define __RESOURCE_LOADER_H__
 
-#include "allocator.h"
 #include "geometry.h"
+#include "def.h"
+#include "obj_reader.h"
 
-typedef enum JM_ResourceFormat
+typedef struct JM_Model
 {
-    JM_RES_FORMAT_UNKNOWN,
-    JM_RES_FORMAT_OBJ
-} JM_ResourceFormat;
+    JM_Vec3* pts;
+    JM_Vec3* triangles;
+} JM_Model;
 
-JM_Scene* jm_resources_load_scene(const I8* filePath, JM_ResourceFormat format, JM_Arena* arena);
+JM_Model* jm_res_constructobj(const JM_ObjData* face);
 
-U0 jm_resources_destroy_scene(JM_Scene* scene);
+U0 jm_res_freemodel(JM_Model* model);
 
 #endif

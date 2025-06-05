@@ -9,14 +9,14 @@
 
 U0 jm_bmp_write(const JM_BMP_Write_ArgDesc *args)
 {
-    ASSERT_NOT_NULL(args);
+    ensure(args);
     const I32 bytesPerRow = args->width * 3;
     const U8 pad[3] = { 0, 0, 0 };
     const I32 padding = (4 - (bytesPerRow) % 4) % 4;
     FILE *out = fopen(args->fileName, "wb");
     if(out == NULL)
     {
-        printerr("Failed to open the output BMP file");
+        printerr("%s", "Failed to open the output BMP file");
         return;
     }
     const I32 fileSize = 54 + (bytesPerRow + padding * args->height);

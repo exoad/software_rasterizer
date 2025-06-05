@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "allocator.h"
 #include "bmp_writer.h"
 #include "chronos.h"
 #include "prebaked_rasters.h"
@@ -17,7 +16,7 @@
 
 static JM_RasterBuffer *buffer = NULL;
 
-static F32 random_F32(const F32 min, const F32 max)
+static F32 random_f32(const F32 min, const F32 max)
 {
     return min + (F32) rand() / RAND_MAX * (max - min); // NOLI32(cert-msc30-c, cert-msc50-cpp)
 }
@@ -27,16 +26,16 @@ static U0 render()
     for(I32 k = 0;k < TRIANGLE_COUNT;k++)
     {
         const JM_Vec2 a = {
-            random_F32(0.f, (F32) buffer->width - 1.f),
-            random_F32(0.f, (F32) buffer->height - 1.f)
+            random_f32(0.f, (F32) buffer->width - 1.f),
+            random_f32(0.f, (F32) buffer->height - 1.f)
         };
         const JM_Vec2 b = {
-            random_F32(0.f, (F32) buffer->width - 1.f),
-            random_F32(0.f, (F32) buffer->height - 1.f)
+            random_f32(0.f, (F32) buffer->width - 1.f),
+            random_f32(0.f, (F32) buffer->height - 1.f)
         };
         const JM_Vec2 c = {
-            random_F32(0.f, (F32) buffer->width - 1.f),
-            random_F32(0.f, (F32) buffer->height - 1.f)
+            random_f32(0.f, (F32) buffer->width - 1.f),
+            random_f32(0.f, (F32) buffer->height - 1.f)
         };
         const JM_Color color = jm_color_random();
         for(
@@ -58,8 +57,8 @@ static U0 _test_write_bmp()
 {
     srand((U32) time(NULL)); // NOLI32(cert-msc30-c, cert-msc51-cpp)
     buffer = jm_prebaked_filled(JM_COLOR_BLACK, RASTER_WIDTH, RASTER_HEIGHT);
-    ASSERT_NOT_NULL(buffer);
-    prI32ln("Rendering took %.0f ms (CPU Time)", JM_TIMED_BLOCK({ render(); }) * 1000);
+    ensure(buffer);
+    println("Rendering took %.0f ms (CPU Time)", JM_TIMED_BLOCK({ render(); }) * 1000);
     jm_bmp_write(
                  &(JM_BMP_Write_ArgDesc)
                  {
@@ -73,10 +72,5 @@ static U0 _test_write_bmp()
 
 I32 main()
 {
-    prI32ln("%s", "Hello");
-    JM_Arena *arena = { 0 };
-    jm_arena_init(arena, 0);
-    prI32ln("%s", "Hello Again");
-    JM_Scene *scene = jm_resources_load_scene("resources/cube.obj", JM_RES_FORMAT_OBJ, arena);
-    prI32ln("Done. %p", (U0* ) scene);
+    _test_write_bmp();
 }

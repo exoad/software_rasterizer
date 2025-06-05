@@ -3,7 +3,6 @@
 
 #include <time.h>
 
-
 typedef clock_t JM_Timestamp;
 
 /// @brief acquire a timing instance

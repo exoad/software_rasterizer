@@ -3,7 +3,7 @@
 
 #include "painting.h"
 
-typedef struct
+typedef struct JM_RasterBuffer
 {
     JM_Color* data;
     I32 width;

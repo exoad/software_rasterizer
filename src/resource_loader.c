@@ -1,0 +1,48 @@
+#include "resource_loader.h"
+#include "external/stb_ds.h"
+#include "painting.h"
+#include "utils.h"
+
+U0 jm_res_freemodel(JM_Model* model)
+{
+    if(model != NULL)
+    {
+        arrfree(model->pts);
+        arrfree(model->triangles);
+        free(model);
+    }
+}
+
+/// @brief connects as much given points using triangle fans
+JM_Vec3* _form_triangles(const JM_ObjData* face)
+{
+    JM_Vec3* triangles = NULL;
+    const I32 facesLength = arrlen(face->faces);
+    for(I32 i = 0; i < facesLength; i++)
+    {
+        const I32 groupLength = arrlen(face->faces[i]);
+        for(I32 j = 0; j < groupLength; j++)
+        {
+            if(face->faces[i]->vIndex >= 3)
+            {
+                arrput(triangles, triangles[groupLength - (3 * j - 6)]);
+                arrput(triangles, triangles[groupLength - 2]);
+            }
+            arrput(triangles, face->vertices[face->faces[i]->vIndex - 1]);
+        }
+    }
+    return triangles;
+}
+
+JM_Model* jm_res_constructobj(const JM_ObjData* face)
+{
+    JM_Vec3* triangles = _form_triangles(face);
+    JM_Model* model = malloc(sizeof(JM_Model));
+    model->pts = triangles;
+    model->triangles = NULL;
+    for(I32 i = 0; i < arrlen(triangles) / 3; i++)
+    {
+        model->triangles[i] = jm_color_to_vec3(jm_color_random());
+    }
+    return model;
+}

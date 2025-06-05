@@ -1,7 +1,6 @@
 #ifndef __GEOMETRY_H__
 #define __GEOMETRY_H__
 
-#include "allocator.h"
 #include "def.h"
 
 /// @brief 3 component vector (3d vector)
@@ -17,29 +16,6 @@ typedef struct JM_Vec2
     F32 x;
     F32 y;
 } JM_Vec2;
-/// @brief A vertex in 3D space
-typedef struct JM_Vertex
-{
-    JM_Vec3 position;
-    JM_Vec3 normal;
-    JM_Vec2 textureCoordinates;
-} JM_Vertex;
-/// @brief A collection of vertices to form a mesh
-typedef struct JM_Mesh {
-    I8 name[64];
-    JM_Vertex* vertices;
-    U32 verticesCount;
-    U32* indices;
-    U32 indicesCount;
-} JM_Mesh;
-/// @brief A collection of meshes
-typedef struct JM_Scene {
-    I8 name[256];
-    JM_Mesh** meshes;
-    U32 meshesCount;
-    JM_Arena* arena;
-} JM_Scene;
-
 /// @brief Dot product of 2 2D vectors
 /// @param a vector 1
 /// @param b vector 2
@@ -80,8 +56,8 @@ Bool jm_triangles_encloses(JM_Vec2 pt, JM_Vec2 a, JM_Vec2 b, JM_Vec2 c);
 /// @return positive - p3 lies to the left of p1 and p2; negative - p3 lies to the right of p1 and p2; 0 - p1, p2, and p3 are collinear
 F32 jm_triangles_sign(JM_Vec2 p1, JM_Vec2 p2, JM_Vec2 p3);
 
-I8* jm_vec2_to_string(const JM_Vec2* vec);
-I8* jm_vec3_to_string(const JM_Vec3* vec);
+I8* jm_vec2_tostring(const JM_Vec2* vec);
+I8* jm_vec3_tostring(const JM_Vec3* vec);
 
 
 #endif

@@ -66,7 +66,7 @@ bool jm_triangles_encloses(const JM_Vec2 pt, const JM_Vec2 a, const JM_Vec2 b, c
     return !(((d1 < 0) || (d2 < 0) || (d3 < 0)) && ((d1 > 0) || (d2 > 0) || (d3 > 0)));
 }
 
-I8* jm_vec2_to_string(const JM_Vec2* vec)
+I8* jm_vec2_tostring(const JM_Vec2* vec)
 {
     if (vec == NULL)
         return NULL;
@@ -77,7 +77,7 @@ I8* jm_vec2_to_string(const JM_Vec2* vec)
         printerr("%s", "Failed to allocate memory for JM_Vec2 string");
         return NULL;
     }
-    if (snprI32f(str, (Sz) buffer_size, "(%.2f, %.2f)", vec->x, vec->y) < 0)
+    if (snprintf(str, (Sz) buffer_size, "(%.2f, %.2f)", vec->x, vec->y) < 0)
     {
         free(str);
         return NULL;
@@ -85,7 +85,7 @@ I8* jm_vec2_to_string(const JM_Vec2* vec)
     return str;
 }
 
-I8* jm_vec3_to_string(const JM_Vec3* vec)
+I8* jm_vec3_tostring(const JM_Vec3* vec)
 {
     if (vec == NULL)
         return NULL;
@@ -95,8 +95,8 @@ I8* jm_vec3_to_string(const JM_Vec3* vec)
         printerr("%s", "Failed to allocate memory for JM_Vec3 string");
         return NULL;
     }
-    const I32 I8s_written = snprI32f(str, 70, "(%.2f, %.2f, %.2f)", vec->x, vec->y, vec->z);
-    if (I8s_written < 0)
+    const I32 written = snprintf(str, 70, "(%.2f, %.2f, %.2f)", vec->x, vec->y, vec->z);
+    if (written < 0)
     {
         free(str);
         return NULL;

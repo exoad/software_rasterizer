@@ -1,5 +1,7 @@
 # software_rasterizer
 
+Made with great inspiration after watching [Coding Adventure: Software Rasterizer w/ Sebastian Lague](https://www.youtube.com/watch?v=yyJ-hdISgnw)
+
 ## Building
 
 This project uses a very simple [Makefile](./Makefile). Please note that this project does use non standard ISO C features like `statement-expressions` which means a preferable compiler

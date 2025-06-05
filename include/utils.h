@@ -19,4 +19,13 @@ static F32 jm_max3f(const F32 a, const F32 b, const F32 c)
     return fmaxf(a, fmaxf(b, c));
 }
 
+JM_Vec3 jm_color_to_vec3(const JM_Color color);
+
+JM_Color jm_vec3_to_color(const JM_Vec3 vec3);
+
+static F32 jm_randomf32(const F32 min, const F32 max)
+{
+    return min + (F32) rand() / RAND_MAX * (max - min); // NOLI32(cert-msc30-c, cert-msc50-cpp)
+}
+
 #endif
