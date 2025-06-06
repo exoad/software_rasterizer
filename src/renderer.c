@@ -26,14 +26,14 @@ JM_Vec2 jm_transform_world_to_screen(
     };
     JM_Vec2 screen_pos;
     screen_pos.x = (ndcPos.x + 1.f) * .5f * (F32)screen_width;
-    screen_pos.y = (1.f - ndcPos.y) * .5f * (F32)screen_height;
+    screen_pos.y = (ndcPos.y + 1.f) * .5f * (F32)screen_height;
     return screen_pos;
 }
 
 
 U0 jm_rasterize_model(const JM_RasterBuffer* buffer, const JM_Model* model, JM_Mat4 modelMatrix, JM_Mat4 viewMatrix, JM_Mat4 projectionMatrix)
 {
-    const I32 trianglesCount = arrlen(model->pts);
+    const I32 trianglesCount = arrlen(model->pts) / 3;
     for(I32 i = 0; i < trianglesCount; i += 3)
     {
         const JM_Color color = model->colors[i / 3];

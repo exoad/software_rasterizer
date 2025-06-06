@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+// TODO: support writing to rgba (ie 32 bit depth supporting alpha channel)
+
 #include "bmp_writer.h"
 
 // the implementation here primarily used the specifications defined by this website:
@@ -10,13 +12,17 @@
 U0 jm_bmp_write(const JM_BMP_Write_ArgDesc *args)
 {
     ensure(args);
+    if(args->bitsPerPixel > 24)
+    {
+        TODO("RGBA Format with 32bit is not supported!");
+    }
     const I32 bytesPerRow = args->width * 3;
     const U8 pad[3] = { 0, 0, 0 };
     const I32 padding = (4 - (bytesPerRow) % 4) % 4;
     FILE *out = fopen(args->fileName, "wb");
     if(out == NULL)
     {
-        printerr("%s", "Failed to open the output BMP file");
+        panic("%s", "Failed to open the output BMP file");
         return;
     }
     const I32 fileSize = 54 + (bytesPerRow + padding * args->height);
@@ -69,7 +75,7 @@ U8 *jm_raster_buffer_to_bmp_data(const JM_RasterBuffer *raster)
     U8 *res = (U8*) malloc(dataSize);
     if(res == NULL)
     {
-        printerr("%s", "Failed to allocate memory.");
+        panic("%s", "Failed to allocate memory.");
         return NULL;
     }
     for(I32 i = 0;i < raster->height;i++)

@@ -4,11 +4,17 @@
 #include "painting.h"
 #include "resource_loaders/resource_loader.h"
 
+typedef enum JM_ColorFormat
+{
+    RGBA, RGB
+} JM_ColorFormat;
+
 typedef struct JM_RasterBuffer
 {
     JM_Color* data;
     I32 width;
     I32 height;
+    JM_ColorFormat colorFormat;
 } JM_RasterBuffer;
 
 /// @brief Acquires a raster buffer to use for writing graphical information to. Returns NULL if the function fails
@@ -34,6 +40,12 @@ U0 jm_set_raster_pixel(const JM_RasterBuffer* buffer, I32 x, I32 y, JM_Color val
 
 U0 jm_rasterize_model(const JM_RasterBuffer* buffer, const JM_Model* model, JM_Mat4 modelMatrix, JM_Mat4 viewMatrix, JM_Mat4 projectionMatrix);
 
-JM_Vec2 jm_transform_world_to_screen();
-
+JM_Vec2 jm_transform_world_to_screen(
+    JM_Vec3 world_pos,
+    JM_Mat4 model_matrix,
+    JM_Mat4 view_matrix,
+    JM_Mat4 projection_matrix,
+    I32 screen_width,
+    I32 screen_height
+);
 #endif

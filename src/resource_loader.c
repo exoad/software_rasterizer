@@ -13,22 +13,22 @@ U0 jm_res_freemodel(JM_Model* model)
     }
 }
 
-/// @brief connects as much given points using triangle fans
-JM_Vec3* _form_triangles(const JM_ObjData* face)
+/// @brief connects as much given points using triangle fans (https://en.wikipedia.org/wiki/Fan_triangulation)
+JM_Vec3* _stitch_triangles(const JM_ObjData* face)
 {
     JM_Vec3* triangles = NULL;
     const I32 facesLength = arrlen(face->faces);
     for(I32 i = 0; i < facesLength; i++)
     {
         const I32 groupLength = arrlen(face->faces[i]);
-        for(I32 j = 0; j < groupLength; j++)
+        if (groupLength < 3)
+            continue;
+        const JM_ObjFaceCorner pivot = face->faces[i][0];
+        for (I32 j = 1; j < groupLength - 1; j++)
         {
-            if(j >= 3)
-            {
-                arrput(triangles, triangles[groupLength - (3 * j - 6)]);
-                arrput(triangles, triangles[groupLength - 2]);
-            }
+            arrput(triangles, face->vertices[pivot.vIndex - 1]);
             arrput(triangles, face->vertices[face->faces[i][j].vIndex - 1]);
+            arrput(triangles, face->vertices[face->faces[i][j + 1].vIndex - 1]);
         }
     }
     return triangles;
@@ -36,7 +36,7 @@ JM_Vec3* _form_triangles(const JM_ObjData* face)
 
 JM_Model* jm_res_constructobj(const JM_ObjData* face)
 {
-    JM_Vec3* triangles = _form_triangles(face);
+    JM_Vec3* triangles = _stitch_triangles(face);
     JM_Model* model = malloc(sizeof(JM_Model));
     model->pts = triangles;
     model->colors = NULL;
@@ -44,9 +44,7 @@ JM_Model* jm_res_constructobj(const JM_ObjData* face)
     arrsetlen(model->colors, len);
     for(I32 i = 0; i < len; i++)
     {
-        const JM_Color color = jm_color_random();
-        println("Color %d: %d %d %d", i, color.r, color.g, color.b);
-        model->colors[i] = color;
+        model->colors[i] = jm_color_random();
 
     }
     println("Triangles Constructed: %d", len);

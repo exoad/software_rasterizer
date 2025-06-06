@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef unsigned char uint8;
 typedef unsigned int uint;
@@ -70,11 +71,22 @@ typedef void Void;
                 exit(EXIT_FAILURE);                                           \
         }
 
+#define TODO(message, ...) \
+        do                                                           \
+        {                                                            \
+                fprintf(stderr, "Unimplemented 'TODO' Error at %s:%d:\n\t%s", __FILE__, __LINE__, (message == NULL || *message == '\0') ? "" : message, ##__VA_ARGS__); \
+                exit(EXIT_FAILURE);                                  \
+        } while (0);
+
+#ifdef JM_ENABLE_PRINTLN
 // Printf but with a new line at the end
-#define println(format, ...) printf(format "\n", ##__VA_ARGS__)
+#       define println(format, ...) printf(format "\n", ##__VA_ARGS__)
+#else
+#       define println(format, ...) (void)0
+#endif
 
 // Prints the target message to stderr with debug information including file name, line number, and function name
-#define printerr(fmt, ...) \
+#define panic(fmt, ...) \
         fprintf(stderr, "\n%s:%d :: %s " fmt "\n", __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 
 #endif

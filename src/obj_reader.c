@@ -42,7 +42,7 @@ I8* jm_obj_facecorner_tostring(const JM_ObjFaceCorner* face)
     I8* buffer = malloc((Sz) 40 * sizeof(I8));
     if(buffer == NULL)
     {
-        printerr("%s", "Faild to alloc memory :(");
+        panic("%s", "Faild to alloc memory :(");
         return NULL;
     }
     if(snprintf(buffer, (Sz) 40, "%lld/%lld/%lld", face->vIndex, face->vtIndex, face->vnIndex) < 0)
@@ -58,7 +58,7 @@ JM_ObjData* jm_obj_parsefile(const I8* pathToFile)
     FILE* file = fopen(pathToFile, "r");
     if(!file)
     {
-        printerr("%s", "Failed to open file");
+        panic("%s", "Failed to open file");
         return NULL;
     }
     I8 buffer[512];
@@ -66,7 +66,7 @@ JM_ObjData* jm_obj_parsefile(const I8* pathToFile)
     JM_ObjData* data = malloc(sizeof(JM_ObjData));
     if(data == NULL)
     {
-        printerr("Failed to allocate memory to parse Wavefront OBJ File: %s", pathToFile);
+        panic("Failed to allocate memory to parse Wavefront OBJ File: %s", pathToFile);
         fclose(file);
         return NULL;
     }
@@ -146,7 +146,7 @@ JM_ObjData* jm_obj_parsefile(const I8* pathToFile)
                         I32 result_vtn = sscanf(tokens, "%lld/%lld/%lld", &corner.vIndex, &corner.vtIndex, &corner.vnIndex);
                         if (!(result_vtn == 3 || result_vn == 2 || result_vt == 2 || result_v == 1))
                         {
-                            printerr("Failed to part face corner token at %lld. Got %s", lineNumber, tokens);
+                            panic("Failed to part face corner token at %lld. Got %s", lineNumber, tokens);
                             return NULL;
                         }
                         //
@@ -227,7 +227,7 @@ JM_ObjData* jm_obj_parsefile(const I8* pathToFile)
             }
             else if(ferror(file))
             {
-                printerr("Program panicked while reading obj file at line %lld", lineNumber);
+                panic("Program panicked while reading obj file at line %lld", lineNumber);
                 jm_obj_freedata(data);
                 fclose(file);
                 return NULL;

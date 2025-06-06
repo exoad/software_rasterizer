@@ -5,3 +5,4 @@
 *.so
 output.bmp
 .vscode
+*.bmp

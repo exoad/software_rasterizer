@@ -62,7 +62,7 @@ I8* jm_vec2_tostring(const JM_Vec2* vec)
     I8* str = malloc((Sz) buffer_size * sizeof(I8));
     if (str == NULL)
     {
-        printerr("%s", "Failed to allocate memory for JM_Vec2 string");
+        panic("%s", "Failed to allocate memory for JM_Vec2 string");
         return NULL;
     }
     if (snprintf(str, (Sz) buffer_size, "(%.2f, %.2f)", vec->x, vec->y) < 0)
@@ -82,7 +82,7 @@ I8* jm_vec3_tostring(const JM_Vec3* vec)
     I8* str = (I8*) malloc(70 * sizeof(I8));
     if (str == NULL)
     {
-        printerr("%s", "Failed to allocate memory for JM_Vec3 string");
+        panic("%s", "Failed to allocate memory for JM_Vec3 string");
         return NULL;
     }
     const I32 written = snprintf(str, 70, "(%.2f, %.2f, %.2f)", vec->x, vec->y, vec->z);
