@@ -40,7 +40,9 @@ JM_Model* jm_res_constructobj(const JM_ObjData* face)
     JM_Model* model = malloc(sizeof(JM_Model));
     model->pts = triangles;
     model->triangles = NULL;
-    for(I32 i = 0; i < arrlen(triangles) / 3; i++)
+    const I32 len =  arrlen(triangles) / 3;
+    arrsetlen(model->triangles, len);
+    for(I32 i = 0; i < len; i++)
     {
         model->triangles[i] = jm_color_to_vec3(jm_color_random());
     }

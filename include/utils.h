@@ -2,6 +2,10 @@
 #define __UTILS_H__
 
 #include <math.h>
+#include <stdlib.h>
+
+#include "geometry.h"
+#include "painting.h"
 
 #define println(format, ...) printf(format "\n", ##__VA_ARGS__)
 

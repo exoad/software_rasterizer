@@ -2,6 +2,7 @@
 #define __RENDERER_H__
 
 #include "painting.h"
+#include "resource_loaders/resource_loader.h"
 
 typedef struct JM_RasterBuffer
 {
@@ -30,5 +31,9 @@ JM_Color jm_get_raster_pixel(const JM_RasterBuffer* buffer, I32 x, I32 y);
 /// @param y y-coordinate (row)
 /// @param value the value to set the pixel to
 U0 jm_set_raster_pixel(const JM_RasterBuffer* buffer, I32 x, I32 y, JM_Color value);
+
+U0 jm_rasterize_model(const JM_RasterBuffer* buffer, const JM_Model* model, JM_Mat4 modelMatrix, JM_Mat4 viewMatrix, JM_Mat4 projectionMatrix);
+
+JM_Vec2 jm_transform_world_to_screen();
 
 #endif

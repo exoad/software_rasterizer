@@ -22,7 +22,7 @@ U0 jm_obj_freedata(JM_ObjData* data)
     {
         return;
     }
-    for (Sz i = 0; i < arrlen(data->faces); ++i)
+    for (I32 i = 0; i < arrlen(data->faces); ++i)
     {
         arrfree(data->faces[i]);
     }
@@ -77,14 +77,14 @@ JM_ObjData* jm_obj_parsefile(const I8* pathToFile)
     while(fgets(buffer, sizeof(buffer), file))
     {
         I8* line = buffer;
-        skip_whitespace(&line);
+        _skip_whitespace(&line);
         if(*line != '#' && *line != '\n' && *line != '\0') // skip comments and empty lines
         {
             I8 commandBuffer[16]; // might not need to fit in 16 letters, for now support vertices and all of that no material and lighting
             if(sscanf(line, "%15s", commandBuffer) == 1)
             {
                 line += strlen(commandBuffer); // move past the size of the command
-                skip_whitespace(&line);
+                _skip_whitespace(&line);
                 // geometric vertices in the format of "v <x> <y> <z>"
                 if(strcmp(commandBuffer, "v") == 0)
                 {
@@ -98,9 +98,9 @@ JM_ObjData* jm_obj_parsefile(const I8* pathToFile)
                     // }
                     I8* ptr;
                     position.x = strtof(line, &ptr);
-                    skip_whitespace(&line);
+                    _skip_whitespace(&line);
                     position.y = strtof(ptr, &ptr);
-                    skip_whitespace(&line);
+                    _skip_whitespace(&line);
                     position.z = strtof(ptr, NULL);
                     arrput(data->vertices, position);
                 }
@@ -110,9 +110,9 @@ JM_ObjData* jm_obj_parsefile(const I8* pathToFile)
                     JM_Vec3 normal;
                     I8* ptr;
                     normal.x = strtof(line, &ptr);
-                    skip_whitespace(&line);
+                    _skip_whitespace(&line);
                     normal.y = strtof(ptr, &ptr);
-                    skip_whitespace(&line);
+                    _skip_whitespace(&line);
                     normal.z = strtof(ptr, NULL);
                     arrput(data->normals, normal);
                 }
@@ -122,7 +122,7 @@ JM_ObjData* jm_obj_parsefile(const I8* pathToFile)
                     JM_Vec2 uv;
                     I8* ptr;
                     uv.x = strtof(line, &ptr);
-                    skip_whitespace(&line);
+                    _skip_whitespace(&line);
                     uv.y = strtof(ptr, NULL);
                     arrput(data->uvs, uv);
                 }
@@ -146,8 +146,8 @@ JM_ObjData* jm_obj_parsefile(const I8* pathToFile)
                         I32 result_vtn = sscanf(tokens, "%lld/%lld/%lld", &corner.vIndex, &corner.vtIndex, &corner.vnIndex);
                         if (!(result_vtn == 3 || result_vn == 2 || result_vt == 2 || result_v == 1))
                         {
-                            printerr("Failed to part face corner token at %d. Got %s", lineNumber, tokens);
-                            return EXIT_FAILURE;
+                            printerr("Failed to part face corner token at %lld. Got %s", lineNumber, tokens);
+                            return NULL;
                         }
                         //
                         // +--- original approach using strtol without using sscanf ---+
@@ -218,12 +218,11 @@ JM_ObjData* jm_obj_parsefile(const I8* pathToFile)
                         arrput(corners, corner);
                     }
                     arrput(data->faces, corners);
-                    printf("\n");
                 }
                 else
                 {
                     // ignore any other commands like mtllib, g, o, s, l, usemtl for now
-                    println("Ignoring unsupported command '%s' at line %d", commandBuffer, lineNumber);
+                    println("Ignoring unsupported command '%s' at line %lld", commandBuffer, lineNumber);
                 }
             }
             else if(ferror(file))

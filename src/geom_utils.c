@@ -2,52 +2,38 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "geometry.h"
 #include "utils.h"
 
-F32 jm_vec2_dot(const JM_Vec2* a, const JM_Vec2* b)
+F32 jm_deg_to_rad(F32 degrees)
 {
-    if(a == NULL || b == NULL)
-    {
-        printerr("%s", "Cannot perform a dot product with a null poI32er.");
-        return 0.f;
-    }
-    return (a->x * b->x) + (a->y * b->y);
+    return degrees * (PI / 180.0f);
 }
 
-F32 jm_vec3_dot(const JM_Vec3* a, const JM_Vec3* b)
+F32 jm_vec2_dot(JM_Vec2 a, JM_Vec2 b)
 {
-    if(a == NULL || b == NULL)
-    {
-        printerr("%s", "Cannot perform a dot product with a null poI32er.");
-        return 0.f;
-    }
-    return (a->x * b->x) + (a->y * b->y) + (a->z * b->z);
+    return (a.x * b.x) + (a.y * b.y);
 }
 
-F32 jm_vec2_cross(const JM_Vec2* a, const JM_Vec2* b)
+F32 jm_vec3_dot(JM_Vec3 a, JM_Vec3 b)
 {
-    if(a == NULL || b == NULL)
-    {
-        printerr("%s", "Cannot perform a cross product with a null poI32er.");
-        return 0.f;
-    }
-    return (a->x * b->y) - (a->y * b->x);
+    return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
 }
 
-JM_Vec3 jm_vec3_cross(const JM_Vec3* a, const JM_Vec3* b)
+F32 jm_vec2_cross(JM_Vec2 a, JM_Vec2 b)
 {
-    if(a == NULL || b == NULL)
-    {
-        printerr("%s", "Cannot perform a cross product with a null poI32er.");
-        return JM_VEC3_ZERO;
-    }
+    return (a.x * b.y) - (a.y * b.x);
+}
+
+JM_Vec3 jm_vec3_cross(JM_Vec3 a, JM_Vec3 b)
+{
     return (JM_Vec3)
     {
-        (a->y * b->z) - (a->z * b->y),
-        (a->z * b->x) - (a->x * b->z),
-        (a->x * b->y) - (a->y * b->x)
+        (a.y * b.z) - (a.z * b.y),
+        (a.z * b.x) - (a.x * b.z),
+        (a.x * b.y) - (a.y * b.x)
     };
 }
 
@@ -102,4 +88,148 @@ I8* jm_vec3_tostring(const JM_Vec3* vec)
         return NULL;
     }
     return str;
+}
+
+JM_Mat4 jm_mat4_identity()
+{
+    JM_Mat4 mat = { 0 };
+    mat.m[0] = 1.0f;
+    mat.m[5] = 1.0f;
+    mat.m[10] = 1.0f;
+    mat.m[15] = 1.0f;
+    return mat;
+}
+
+JM_Mat4 jm_mat4_mul(JM_Mat4 a, JM_Mat4 b)
+{
+    JM_Mat4 result = { 0 };
+    for(I32 i = 0; i < 4; i++)
+    {
+        for(I32 j = 0; j < 4; j++)
+        {
+            for(I32 k = 0; k < 4; k++)
+            {
+                result.m[i * 4 + j] += a.m[k * 4 + j] * b.m[i * 4 + k];
+            }
+        }
+    }
+    return result;
+}
+
+JM_Vec4 jm_mat4_mul_vec4(JM_Mat4 m, JM_Vec4 v)
+{
+    JM_Vec4 res;
+    res.x = m.m[0] * v.x + m.m[4] * v.y + m.m[8] * v.z + m.m[12] * v.w;
+    res.y = m.m[1] * v.x + m.m[5] * v.y + m.m[9] * v.z + m.m[13] * v.w;
+    res.z = m.m[2] * v.x + m.m[6] * v.y + m.m[10] * v.z + m.m[14] * v.w;
+    res.w = m.m[3] * v.x + m.m[7] * v.y + m.m[11] * v.z + m.m[15] * v.w;
+    return res;
+}
+
+JM_Mat4 jm_mat4_translate(JM_Vec3 t)
+{
+    JM_Mat4 mat = jm_mat4_identity();
+    mat.m[12] = t.x;
+    mat.m[13] = t.y;
+    mat.m[14] = t.z;
+    return mat;
+}
+
+JM_Mat4 jm_mat4_rotate_x(F32 angleRadians)
+{
+    JM_Mat4 mat = jm_mat4_identity();
+    F32 c = cosf(angleRadians);
+    F32 s = sinf(angleRadians);
+    mat.m[5] = c;
+    mat.m[6] = s;
+    mat.m[9] = -s;
+    mat.m[10] = c;
+    return mat;
+}
+
+JM_Mat4 jm_mat4_rotate_y(F32 angleRadians)
+{
+    JM_Mat4 mat = jm_mat4_identity();
+    F32 c = cosf(angleRadians);
+    F32 s = sinf(angleRadians);
+    mat.m[0] = c;
+    mat.m[2] = -s;
+    mat.m[8] = s;
+    mat.m[10] = c;
+    return mat;
+}
+
+JM_Mat4 jm_mat4_rotate_z(F32 angleRadians)
+{
+    JM_Mat4 mat = jm_mat4_identity();
+    F32 c = cosf(angleRadians);
+    F32 s = sinf(angleRadians);
+    mat.m[0] = c;
+    mat.m[1] = s;
+    mat.m[4] = -s;
+    mat.m[5] = c;
+    return mat;
+}
+
+JM_Mat4 jm_mat4_scale(JM_Vec3 s)
+{
+    JM_Mat4 mat = jm_mat4_identity();
+    mat.m[0] = s.x;
+    mat.m[5] = s.y;
+    mat.m[10] = s.z;
+    return mat;
+}
+
+JM_Mat4 jm_mat4_perspective(F32 fovRad, F32 aspect, F32 nearPlane, F32 farPlane)
+{
+    JM_Mat4 mat = {0};
+    F32 tan_half_fov = tanf(fovRad / 2.f);
+    F32 rangeZ = nearPlane - farPlane;
+    mat.m[0] = 1.f / (aspect * tan_half_fov);        // c0r0
+    mat.m[5] = 1.f / tan_half_fov;                   // c1r1
+    mat.m[10] = (-nearPlane - farPlane) / rangeZ;    // c2r2
+    mat.m[11] = 1.f;                                 // c2r3
+    mat.m[14] = 2.f * farPlane * nearPlane / rangeZ; // c3r2
+    return mat;
+}
+
+JM_Vec3 jm_vec3_normalize(JM_Vec3 v)
+{
+    F32 length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+    if (length > 0)
+    {
+        return (JM_Vec3) { v.x / length, v.y / length, v.z / length };
+    }
+    return (JM_Vec3) { 0, 0, 0 };
+}
+
+JM_Vec3 jm_vec3_sub(JM_Vec3 a, JM_Vec3 b)
+{
+    return (JM_Vec3) { a.x - b.x, a.y - b.y, a.z - b.z };
+}
+
+JM_Mat4 jm_mat4_lookat(JM_Vec3 eye, JM_Vec3 target, JM_Vec3 up)
+{
+    const JM_Vec3 normalizedUp = jm_vec3_normalize(up);
+    JM_Vec3 zAxis = jm_vec3_normalize(jm_vec3_sub(eye, target));
+    JM_Vec3 xAxis = jm_vec3_normalize(jm_vec3_cross(normalizedUp, zAxis));
+    JM_Vec3 yAxis = jm_vec3_cross(zAxis, xAxis);
+    JM_Mat4 mat = { 0 };
+    mat.m[0] = xAxis.x;
+    mat.m[1] = yAxis.x;
+    mat.m[2] = zAxis.x;
+    mat.m[3] = 0.f;
+    mat.m[4] = xAxis.y;
+    mat.m[5] = yAxis.y;
+    mat.m[6] = zAxis.y;
+    mat.m[7] = 0.f;
+    mat.m[8] = xAxis.z;
+    mat.m[9] = yAxis.z;
+    mat.m[10] = zAxis.z;
+    mat.m[11] = 0.f;
+    mat.m[12] = -jm_vec3_dot(xAxis, eye);
+    mat.m[13] = -jm_vec3_dot(yAxis, eye);
+    mat.m[14] = -jm_vec3_dot(zAxis, eye);
+    mat.m[15] = 1.0f;
+    return mat;
 }

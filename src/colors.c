@@ -36,5 +36,5 @@ JM_Vec3 jm_color_to_vec3(const JM_Color color)
 
 JM_Color jm_vec3_to_color(const JM_Vec3 vec3)
 {
-    return (JM_Color) { .r = vec3.x, .g = vec3.y, .b = vec3.z, .a = 255 };
+    return (JM_Color) { .r = vec3.x * 255, .g = vec3.y * 255, .b = vec3.z * 255, .a = 255 };
 }

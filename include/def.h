@@ -59,8 +59,8 @@ typedef float F32;
 typedef double F64;
 typedef int16_t I16;
 typedef uint16_t U16;
-typedef U0 U0;
-typedef U0 U0;
+typedef void U0;
+typedef void Void;
 
 #define ensure(ptr)                                                           \
         if ((ptr) == NULL)                                                    \
