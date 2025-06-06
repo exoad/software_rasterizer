@@ -5,6 +5,7 @@ Made with great inspiration after watching [Coding Adventure: Software Rasterize
 Additional Resources:
 1. [UT Austin CS354 ~ Line Rasterization](https://www.cs.utexas.edu/~bajaj/graphics2012/cs354/lectures/lect02.pdf)
 2. [UT Austin CS354 ~ Projection Clipping](https://www.cs.utexas.edu/~fussell/courses/cs354-fall2015/lectures/lecture9.pdf)
+3. [Paul Bourke Object Files](https://paulbourke.net/dataformats/obj/)
 
 ## Building
 
