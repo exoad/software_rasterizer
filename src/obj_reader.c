@@ -1,4 +1,4 @@
-#include "resource_loaders/obj_reader.h";
+#include "resource_loaders/obj_reader.h"
 #include "external/stb_ds.h"
 #include "def.h"
 

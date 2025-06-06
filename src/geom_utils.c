@@ -55,7 +55,9 @@ bool jm_triangles_encloses(const JM_Vec2 pt, const JM_Vec2 a, const JM_Vec2 b, c
 I8* jm_vec2_tostring(const JM_Vec2* vec)
 {
     if (vec == NULL)
+    {
         return NULL;
+    }
     const I32 buffer_size = 50;
     I8* str = malloc((Sz) buffer_size * sizeof(I8));
     if (str == NULL)
@@ -74,7 +76,9 @@ I8* jm_vec2_tostring(const JM_Vec2* vec)
 I8* jm_vec3_tostring(const JM_Vec3* vec)
 {
     if (vec == NULL)
+    {
         return NULL;
+    }
     I8* str = (I8*) malloc(70 * sizeof(I8));
     if (str == NULL)
     {
@@ -103,13 +107,14 @@ JM_Mat4 jm_mat4_identity()
 JM_Mat4 jm_mat4_mul(JM_Mat4 a, JM_Mat4 b)
 {
     JM_Mat4 result = { 0 };
-    for(I32 i = 0; i < 4; i++)
+    for(I32 col = 0; col < 4; col++)
     {
-        for(I32 j = 0; j < 4; j++)
+        for(I32 row = 0; row < 4; row++)
         {
+            result.m[col * 4 + row] = 0.f;
             for(I32 k = 0; k < 4; k++)
             {
-                result.m[i * 4 + j] += a.m[k * 4 + j] * b.m[i * 4 + k];
+                result.m[col * 4 + row] += a.m[k * 4 + row] * b.m[col * 4 + k];
             }
         }
     }
@@ -182,14 +187,13 @@ JM_Mat4 jm_mat4_scale(JM_Vec3 s)
 
 JM_Mat4 jm_mat4_perspective(F32 fovRad, F32 aspect, F32 nearPlane, F32 farPlane)
 {
-    JM_Mat4 mat = {0};
-    F32 tan_half_fov = tanf(fovRad / 2.f);
-    F32 rangeZ = nearPlane - farPlane;
-    mat.m[0] = 1.f / (aspect * tan_half_fov);        // c0r0
-    mat.m[5] = 1.f / tan_half_fov;                   // c1r1
-    mat.m[10] = (-nearPlane - farPlane) / rangeZ;    // c2r2
-    mat.m[11] = 1.f;                                 // c2r3
-    mat.m[14] = 2.f * farPlane * nearPlane / rangeZ; // c3r2
+    JM_Mat4 mat = { 0 };
+    F32 f = 1.f / tanf(fovRad / 2.f);
+    mat.m[0] = f / aspect;                                             // c0r0
+    mat.m[5] = f;                                                      // c1r1
+    mat.m[10] = (farPlane + nearPlane) / (nearPlane - farPlane);       // c2r2
+    mat.m[11] = -1.f;                                                  // c2r3
+    mat.m[14] = (2.f * farPlane * nearPlane) / (nearPlane - farPlane); // c3r2
     return mat;
 }
 

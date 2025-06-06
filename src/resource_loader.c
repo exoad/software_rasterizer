@@ -23,12 +23,12 @@ JM_Vec3* _form_triangles(const JM_ObjData* face)
         const I32 groupLength = arrlen(face->faces[i]);
         for(I32 j = 0; j < groupLength; j++)
         {
-            if(face->faces[i]->vIndex >= 3)
+            if(j >= 3)
             {
                 arrput(triangles, triangles[groupLength - (3 * j - 6)]);
                 arrput(triangles, triangles[groupLength - 2]);
             }
-            arrput(triangles, face->vertices[face->faces[i]->vIndex - 1]);
+            arrput(triangles, face->vertices[face->faces[i][j].vIndex - 1]);
         }
     }
     return triangles;

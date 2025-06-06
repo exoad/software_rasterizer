@@ -74,10 +74,10 @@ static U0 _test_write_bmp()
 }
 
 static U0 render_frame(JM_RasterBuffer* framebuffer, JM_Model* model) {
-    JM_Vec3 cameraPos = (JM_Vec3) { 0.f, 0.f, 10.f };
+    JM_Vec3 cameraPos = (JM_Vec3) { 0.f, 0.f, 5.5f };
     JM_Vec3 cameraTarget = JM_VEC3_ZERO;
     JM_Vec3 cameraUp = (JM_Vec3) { 0.f, 1.f, 0.f }; // +y is up :)
-    F32 fov = 120.f;
+    F32 fov = 60.f;
     F32 aspectRatio = (F32)framebuffer->width / (F32)framebuffer->height;
     F32 nearPlane = .1f;
     F32 farPlane = 100.f;
@@ -89,9 +89,9 @@ static U0 render_frame(JM_RasterBuffer* framebuffer, JM_Model* model) {
         farPlane
     );
     JM_Mat4 model_matrix = jm_mat4_identity();
-    static F32 rotation_angle = 0.0f;
+    static F32 rotation_angle = 0.f;
     model_matrix = jm_mat4_rotate_y(rotation_angle);
-    rotation_angle += jm_deg_to_rad(1.0f);
+    rotation_angle += jm_deg_to_rad(1.f);
     jm_rasterize_model(
         framebuffer,
         model,
@@ -105,6 +105,20 @@ I32 main()
 {
     const I8* objFile = "resources/cube.obj";
     JM_ObjData* objData = jm_obj_parsefile(objFile);
+    I32 l = 1;
+    for(I32 i = 0; i < arrlen(objData->vertices); i++)
+    {
+        println("%d: Vertex: %.2f, %.2f, %.2f", l++, objData->vertices[i].x, objData->vertices[i].y, objData->vertices[i].z);
+    }
+    for(I32 i = 0; i < arrlen(objData->faces); i++)
+    {
+        printf("%d: Face: ", l++);
+        for(I32 j = 0; j < arrlen(objData->faces[i]); j++)
+        {
+            printf("%lld ", objData->faces[i][j].vIndex);
+        }
+        printf("\n");
+    }
     JM_Model* model = jm_res_constructobj(objData);
     buffer = jm_prebaked_filled(JM_COLOR_BLACK, RASTER_WIDTH, RASTER_HEIGHT);
     ensure(buffer);

@@ -6,7 +6,7 @@ else ifeq ($(filter asan,$(MAKECMDGOALS)),asan)
     ASAN_FLAGS = -fsanitize=address -fsanitize=undefined -fsanitize-trap=all
 endif
 
-CFLAGS = -Wall -Wextra -Wpedantic -Wcast-align -Wconversion -Wunused -Wshadow -O3 $(ASAN_FLAGS) -std=c17 -Iinclude -Iinclude/resource_loaders
+CFLAGS = -Wall -Wextra -Wpedantic -Wunused -Wcast-align -Wno-unused-function -Wshadow -O3 $(ASAN_FLAGS) -std=c17 -Iinclude -Iinclude/resource_loaders
 
 LDFLAGS = $(ASAN_FLAGS)
 
