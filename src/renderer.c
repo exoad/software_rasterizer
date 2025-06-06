@@ -36,7 +36,7 @@ U0 jm_rasterize_model(const JM_RasterBuffer* buffer, const JM_Model* model, JM_M
     const I32 trianglesCount = arrlen(model->pts);
     for(I32 i = 0; i < trianglesCount; i += 3)
     {
-        const JM_Color color = jm_vec3_to_color(model->triangles[i / 3]);
+        const JM_Color color = model->colors[i / 3];
         const JM_Vec2 a = jm_transform_world_to_screen(model->pts[i], modelMatrix, viewMatrix, projectionMatrix, buffer->width, buffer->height);
         const JM_Vec2 b = jm_transform_world_to_screen(model->pts[i + 1], modelMatrix, viewMatrix, projectionMatrix, buffer->width, buffer->height);
         const JM_Vec2 c = jm_transform_world_to_screen(model->pts[i + 2], modelMatrix, viewMatrix, projectionMatrix, buffer->width, buffer->height);

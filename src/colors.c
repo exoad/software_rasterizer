@@ -9,9 +9,9 @@
 JM_Color jm_color_random()
 {
     return (JM_Color) {
-        .r = (U8) rand(), // NOLINT(cert-msc30-c, cert-msc50-cpp)
-        .g = (U8) rand(), // NOLINT(cert-msc30-c, cert-msc50-cpp)
-        .b = (U8) rand(), // NOLINT(cert-msc30-c, cert-msc50-cpp)
+        .r = ((F32) rand() / (F32) (RAND_MAX)) * 255, // NOLINT(cert-msc30-c, cert-msc50-cpp)
+        .g = ((F32) rand() / (F32) (RAND_MAX)) * 255, // NOLINT(cert-msc30-c, cert-msc50-cpp)
+        .b = ((F32) rand() / (F32) (RAND_MAX)) * 255, // NOLINT(cert-msc30-c, cert-msc50-cpp)
         .a = 255
     };
 }
@@ -31,7 +31,7 @@ const JM_Color JM_COLOR_TRANSPARENT_BLACK = { .r = 0  , .g = 0  , .b = 0  , .a =
 
 JM_Vec3 jm_color_to_vec3(const JM_Color color)
 {
-    return (JM_Vec3) { .x = color.r, .y = color.g, .z = color.b };
+    return (JM_Vec3) { .x = color.r / 255, .y = color.g / 255, .z = color.b / 255 };
 }
 
 JM_Color jm_vec3_to_color(const JM_Vec3 vec3)

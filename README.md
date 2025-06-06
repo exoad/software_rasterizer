@@ -1,4 +1,6 @@
-# software_rasterizer
+<h1 align="center">
+<img src="./meta/logo.png" width=86/><br/>software_rasterizer
+</h1>
 
 **Let your CPU cosplay as a GPU 💅!**
 
@@ -34,4 +36,4 @@ make asan
 1. [UT Austin CS354](https://www.cs.utexas.edu/~theshark/courses/cs354/lectures.html)
 2. [Paul Bourke Object Files](https://paulbourke.net/dataformats/obj/)
 3. [Cornell CS4620 View Explorer](https://www.cs.cornell.edu/courses/cs4620/2019fa/demos/view_explore/view_explore_ortho.html)
-4. [UAlberta ~ BMP File Format](https://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm) 
+4. [UAlberta ~ BMP File Format](https://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm)

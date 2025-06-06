@@ -8,7 +8,7 @@ U0 jm_res_freemodel(JM_Model* model)
     if(model != NULL)
     {
         arrfree(model->pts);
-        arrfree(model->triangles);
+        arrfree(model->colors);
         free(model);
     }
 }
@@ -39,12 +39,16 @@ JM_Model* jm_res_constructobj(const JM_ObjData* face)
     JM_Vec3* triangles = _form_triangles(face);
     JM_Model* model = malloc(sizeof(JM_Model));
     model->pts = triangles;
-    model->triangles = NULL;
+    model->colors = NULL;
     const I32 len =  arrlen(triangles) / 3;
-    arrsetlen(model->triangles, len);
+    arrsetlen(model->colors, len);
     for(I32 i = 0; i < len; i++)
     {
-        model->triangles[i] = jm_color_to_vec3(jm_color_random());
+        const JM_Color color = jm_color_random();
+        println("Color %d: %d %d %d", i, color.r, color.g, color.b);
+        model->colors[i] = color;
+
     }
+    println("Triangles Constructed: %d", len);
     return model;
 }

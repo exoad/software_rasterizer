@@ -73,10 +73,12 @@ static U0 _test_write_bmp()
                  });
 }
 
+static const JM_Vec3 cameraPos = (JM_Vec3) { 0.f, 0.f, 4.5f };
+static const JM_Vec3 cameraTarget = JM_VEC3_ZERO;
+static const JM_Vec3 cameraUp = (JM_Vec3) { 0.f, 1.f, 0.f }; // +y is up :)
+
 static U0 render_frame(JM_RasterBuffer* framebuffer, JM_Model* model) {
-    JM_Vec3 cameraPos = (JM_Vec3) { 0.f, 0.f, 5.5f };
-    JM_Vec3 cameraTarget = JM_VEC3_ZERO;
-    JM_Vec3 cameraUp = (JM_Vec3) { 0.f, 1.f, 0.f }; // +y is up :)
+
     F32 fov = 60.f;
     F32 aspectRatio = (F32)framebuffer->width / (F32)framebuffer->height;
     F32 nearPlane = .1f;
