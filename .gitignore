@@ -3,6 +3,5 @@
 *.o
 *.dll
 *.so
-/meta
 output.bmp
 .vscode
