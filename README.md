@@ -1,15 +1,16 @@
 # software_rasterizer
 
-Resources:
-1. [UT Austin CS354 ~ Line Rasterization](https://www.cs.utexas.edu/~bajaj/graphics2012/cs354/lectures/lect02.pdf)
-2. [UT Austin CS354 ~ Projection Clipping](https://www.cs.utexas.edu/~fussell/courses/cs354-fall2015/lectures/lecture9.pdf)
-3. [Paul Bourke Object Files](https://paulbourke.net/dataformats/obj/)
-4. [Cornell CS4620 View Explorer](https://www.cs.cornell.edu/courses/cs4620/2019fa/demos/view_explore/view_explore_ortho.html)
+**Let your CPU cosplay as a GPU 💅!**
+
+This was a simple hobby project made on the side with what I learned from resources online. It uses the CPU
+to perform the rasterization process, the magical process of turning 3D stuffs to be viewable on your 2D screen.
+
+Currently, this rasterizer only has a builtin parser for loading Wavefront Object files, but you can definitely
+pipe your own.
 
 ## Building
 
-This project uses a very simple [Makefile](./Makefile). Please note that this project does use non standard ISO C features like `statement-expressions` which means a preferable compiler
-will be GCC or Clang.
+This project uses a very simple [Makefile](./Makefile).
 
 By default it compiles without an address sanitizer (because I am on Windows and the GCC MingW64 installation I have
 does not have a native ASAN port and I am too lazy):
@@ -27,3 +28,9 @@ If you have and can link with an address sanitizer build it with the `asan` targ
 ```bash
 make asan
 ```
+
+## Resources
+
+1. [UT Austin CS354](https://www.cs.utexas.edu/~theshark/courses/cs354/lectures.html)
+2. [Paul Bourke Object Files](https://paulbourke.net/dataformats/obj/)
+3. [Cornell CS4620 View Explorer](https://www.cs.cornell.edu/courses/cs4620/2019fa/demos/view_explore/view_explore_ortho.html)
