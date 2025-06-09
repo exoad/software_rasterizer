@@ -10,6 +10,17 @@ to perform the rasterization process, the magical process of turning 3D stuffs t
 Currently, this rasterizer only has a builtin parser for loading Wavefront Object files, but you can definitely
 pipe your own.
 
+## Chores
+
+This project is not finished and should serves as just mainly inspiration and learning material for myself. There are some things
+that I would like to work on within:
+
+1. Fixing up the current triangulation method of using Fan Triangulation and improving it to work for concave polygons better.
+2. Utilize the cglm graphics math library instead of my own (my math skills is questionable)
+3. Move to rendering with basic STB files with Sokol and windowing and rendering to a window using SDL.
+4. Implementing some kind of culling method with backface and frustum methods
+5. Optimize the math currently used for projection and NDC calculations (which are wrong)
+
 ## Building
 
 This project uses a very simple [Makefile](./Makefile).
