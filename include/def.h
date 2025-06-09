@@ -79,13 +79,11 @@ typedef void Void;
         } while (0);
 
 #ifdef JM_ENABLE_PRINTLN
-// Printf but with a new line at the end
 #       define println(format, ...) printf(format "\n", ##__VA_ARGS__)
 #else
 #       define println(format, ...) (void)0
 #endif
 
-// Prints the target message to stderr with debug information including file name, line number, and function name
 #define panic(fmt, ...) \
         fprintf(stderr, "\n%s:%d :: %s " fmt "\n", __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 

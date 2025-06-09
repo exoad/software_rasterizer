@@ -7,8 +7,6 @@
 #include "geometry.h"
 #include "painting.h"
 
-#define println(format, ...) printf(format "\n", ##__VA_ARGS__)
-
 #define JM_VEC2_ZERO ((JM_Vec2){0.0f, 0.0f})
 #define JM_VEC3_ZERO ((JM_Vec3){0.0f, 0.0f, 0.0f})
 

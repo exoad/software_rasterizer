@@ -9,8 +9,6 @@
 // ---------------------------------------
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 
 #define STB_DS_IMPLEMENTATION
 
@@ -82,29 +80,29 @@ static JM_Vec3 cameraPos = (JM_Vec3) { 0.f, 0.f, 5.f };
 static const JM_Vec3 cameraTarget = (JM_Vec3) { 0.f, 0.f, 0.f };
 static const JM_Vec3 cameraUp = (JM_Vec3) { 0.f, 1.f, 0.f };
 
-static U0 render_frame(JM_RasterBuffer* framebuffer, JM_Model* model)
+static U0 render_frame(JM_RasterBuffer* framebuffer, JM_Model* modelToRender) 
 {
     F32 fov = 45.f;
     F32 aspectRatio = (F32) framebuffer->width / (F32) framebuffer->height;
     F32 nearPlane = .1f;
     F32 farPlane = 100.f;
-    JM_Mat4 view_matrix = jm_mat4_lookat(cameraPos, cameraTarget, cameraUp);
-    JM_Mat4 projection_matrix = jm_mat4_perspective(
+    JM_Mat4 viewMatrix = jm_mat4_lookat(cameraPos, cameraTarget, cameraUp);
+    JM_Mat4 projectionMatrix = jm_mat4_perspective(
         jm_deg_to_rad(fov),
         aspectRatio,
         nearPlane,
         farPlane
     );
-    JM_Mat4 model_matrix = jm_mat4_identity();
-    static F32 rotation_angle = 0.f;
-    model_matrix = jm_mat4_rotate_y(rotation_angle);
-    rotation_angle += jm_deg_to_rad(1.f);
+    JM_Mat4 modelMatrix = jm_mat4_identity();
+    static F32 rotationAngle = 0.f;
+    modelMatrix = jm_mat4_rotate_y(rotationAngle);
+    rotationAngle += jm_deg_to_rad(1.f);
     jm_rasterize_model(
         framebuffer,
-        model,
-        model_matrix,
-        view_matrix,
-        projection_matrix
+        modelToRender,
+        modelMatrix,
+        viewMatrix, 
+        projectionMatrix
     );
 }
 
@@ -153,7 +151,7 @@ I32 main()
             cameraPos = (JM_Vec3) { 0.f, 0.f, 5.f };
             render("cube.bmp");
         }
-        else if(strlen(lineBuffer) >= 2)
+        else if(strlen(lineBuffer) >= 1)
         {
             char action = lineBuffer[0];
             I32 amount = atoi(&lineBuffer[1]);  // Parse amount from the rest
